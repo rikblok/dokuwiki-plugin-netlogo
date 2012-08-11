@@ -49,27 +49,80 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //    }
 
     public function handle($match, $state, $pos, &$handler){
-		// todo: copy width/height syntax from DokuWiki images, eg. "{{netlogo>file.nlogo?640x480}}"
-        $match=substr($match,10,-2); // strip leading "{{netlogo>" and trailing "}}"
-		preg_match( '/^[^ ]/', $match, $match_file);  
-		$match=substr($match,strlen($match_file)); // strip filename
-		if (!preg_match('/width=([0-9]+)/i', $match, $match_width)) { $match_width[1] = "640"; }
-		if (!preg_match('/height=([0-9]+)/i', $match, $match_height)) { $match_height[1] = "480"; }
-		return array( 
-			$match_file,
-			$match_width[1],
-			$match_height[1]
+		/*
+		 * Copied from DokuWiki media handler in
+		 * http://xref.dokuwiki.org/reference/dokuwiki/_functions/doku_handler_parse_media.html
+		*/
+		// Strip the opening and closing markup
+		$link = preg_replace(array('/^\{\{netlogo>/','/\}\}$/u'),'',$match);	
+		
+		// Split title from URL
+		$link = explode('|',$link,2);
+
+		// Check alignment
+		$ralign = (bool)preg_match('/^ /',$link[0]);
+		$lalign = (bool)preg_match('/ $/',$link[0]);
+
+		// Logic = what's that ;)...
+		if ( $lalign & $ralign ) {
+			$align = 'center';
+		} else if ( $ralign ) {
+			$align = 'right';
+		} else if ( $lalign ) {
+			$align = 'left';
+		} else {
+			$align = NULL;
+		}
+
+		// The title...
+		if ( !isset($link[1]) ) {
+			$link[1] = NULL;
+		}
+
+		//remove aligning spaces
+		$link[0] = trim($link[0]);
+
+		//split into src and parameters (using the very last questionmark)
+		$pos = strrpos($link[0], '?');
+		if($pos !== false){
+			$src   = substr($link[0],0,$pos);
+			$param = substr($link[0],$pos+1);
+		}else{
+			$src   = $link[0];
+			$param = '';
+		}
+
+		//parse width and height
+		if(preg_match('#(\d+)(x(\d+))?#i',$param,$size)){
+			($size[1]) ? $w = $size[1] : $w = NULL;
+			($size[3]) ? $h = $size[3] : $h = NULL;
+		} else {
+			$w = NULL;
+			$h = NULL;
+		}
+
+		// default width and height
+		if (is_null($w)) $w = '640';
+		if (is_null($h)) $h = '480';
+		
+		$params = array(
+			'src'=>$src,
+			'title'=>$link[1],
+			'align'=>$align,
+			'width'=>$w,
+			'height'=>$h,
 		);
+
+		return $params;
     }
 
     public function render($mode, &$renderer, $data) {
         if($mode != 'xhtml') return false;
-		list( $file, $width, $height ) = $data;
 		$renderer->doc .= "<applet code=\"org.nlogo.lite.Applet\""
 								. "        archive=\"".DOKU_PLUGIN."netlogo/netlogolite/5.0.1/NetLogoLite.jar\""
-								. "        width=\"$width\" height=\"$height\">"
+								. "        width=\"$data['width']\" height=\"$data['height']\">"
 								. "  <param name=\"DefaultModel\""
-								. "        value=\"$file\">"
+								. "        value=\"$data['src']\">"
 								. "  <param name=\"java_arguments\""
 								. "        value=\"-Djnlp.packEnabled=true\">"
 								. "</applet>";
