@@ -120,9 +120,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
         if($mode != 'xhtml') return false;
 		$renderer->doc .= "<applet code=\"org.nlogo.lite.Applet\""
 								. "        archive=\"".DOKU_PLUGIN."netlogo/netlogolite/5.0.1/NetLogoLite.jar\""
-								. "        width=\"$data['width']\" height=\"$data['height']\">"
+								. "        width=\"".$data['width']."\" height=\"".$data['height']."\">"
 								. "  <param name=\"DefaultModel\""
-								. "        value=\"$data['src']\">"
+								. "        value=\"".$data['src']."\">"
 								. "  <param name=\"java_arguments\""
 								. "        value=\"-Djnlp.packEnabled=true\">"
 								. "</applet>";
