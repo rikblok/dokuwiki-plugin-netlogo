@@ -49,27 +49,27 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //    }
 
     public function handle($match, $state, $pos, &$handler){
+		// todo: copy width/height syntax from DokuWiki images, eg. "{{netlogo>file.nlogo?640x480}}"
         $match=substr($match,10,-2); // strip leading "{{netlogo>" and trailing "}}"
-		preg_match( '/[^ /', $match, $match_file);
-		/*
-		preg_match( '/width=([0-9]+)/i',            substr( $match, 6, -1 ), $match_width   );
-		preg_match( '/height=([0-9]+)/i',           substr( $match, 6, -1 ), $match_height  );
-		preg_match( '/code=([a-zA-Z_0-9].+)/i',      substr( $match, 6, -1 ), $match_code    );
-		preg_match( '/archive=([a-zA-Z_0-9:.]+)/i', substr( $match, 6, -1 ), $match_archive );
-		*/
+		preg_match( '/^[^ ]/', $match, $match_file);  
+		$match=substr($match,strlen($match_file[0])); // strip filename
+		if (!preg_match('/width=([0-9]+)/i', $match, $match_width)) { $match_width[1] = "640"; }
+		if (!preg_match('/height=([0-9]+)/i', $match, $match_height)) { $match_height[1] = "480"; }
 		return array( 
-			$match_file[1]
+			$match_file[0],
+			$match_width[1],
+			$match_height[1]
 		);
     }
 
     public function render($mode, &$renderer, $data) {
         if($mode != 'xhtml') return false;
-		list( $file ) = $data;
+		list( $file, $width, $height ) = $data;
 		$renderer->doc .= "[applet code=\"org.nlogo.lite.Applet\""
 								. "        archive=\"netlogolite/5.0.1/NetLogoLite.jar\""
-								. "        width=\"844\" height=\"690\">"
+								. "        width=\"$width\" height=\"$height\">"
 								. "  [param name=\"DefaultModel\""
-								. "        value=\"".$file."\">"
+								. "        value=\"$file\">"
 								. "  [param name=\"java_arguments\""
 								. "        value=\"-Djnlp.packEnabled=true\">"
 								. "[/applet>";
