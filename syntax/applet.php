@@ -122,15 +122,15 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		*/
         if($mode != 'xhtml') return false;
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
-								. '        archive="'.DOKU_PLUGIN.'netlogo/netlogolite/5.0.1/NetLogoLite.jar"'
-								. '        width="'.$data['width'].'" height="'.$data['height'].'"';
-		if (!is_null($data['align'])	$renderer->doc .= ' align="'.$data['align'].'"';
-		if (!is_null($data['title'])	$renderer->doc .= ' alt="'.$data['title'].'"';
+								. '    archive="'.DOKU_PLUGIN.'netlogo/netlogolite/5.0.1/NetLogoLite.jar"'
+								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
+		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
+		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
-								. '        value="'.$data['src'].'">'
+								. '      value="'.$data['src'].'">'
 								. '  <param name="java_arguments"'
-								. '        value="-Djnlp.packEnabled=true">'
+								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
         return true;
     }
