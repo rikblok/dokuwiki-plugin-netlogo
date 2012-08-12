@@ -135,7 +135,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			return true;
 		}
 		// testing fetch.php
-		$src = DOKU_INC.'lib/exe/fetch.php?media=playground%3A2012-07_diffusion_2012-07-27.nlogo';
+		$src = '/~rikblok/wiki/lib/exe/fetch.php?media=playground:2012-07_diffusion_2012-07-27.nlogo';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
 								. '    archive="'.DOKU_PLUGIN.'netlogo/netlogolite/5.0.1/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
