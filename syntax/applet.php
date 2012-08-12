@@ -123,7 +123,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		global $ID;
 		
         if($mode != 'xhtml') return false;
-		$src = data['src'];
+		$src = $data['src'];
 		resolve_mediaid(getNS($ID),$src,$exists);
 		$src = mediaFN($src);
 		if (!$exists) {
