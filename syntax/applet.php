@@ -120,7 +120,16 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		/*
 		 * Todo: Copy DokuWiki's media renderer to get path to internal file.
 		*/
+		global $ID;
+		
         if($mode != 'xhtml') return false;
+		$src = data['src'];
+		resolve_mediaid(getNS($ID),$src,$exists);
+		$src = mediaFN($src);
+		if (!$exists) {
+			$renderer->doc .= 'File not found: ' . $src;
+			return true;
+		}
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
 								. '    archive="'.DOKU_PLUGIN.'netlogo/netlogolite/5.0.1/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
@@ -128,7 +137,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
-								. '      value="'.$data['src'].'">'
+								. '      value="'.$src.'">'
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
