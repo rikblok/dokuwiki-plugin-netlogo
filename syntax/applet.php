@@ -65,7 +65,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 		// Logic = what's that ;)...
 		if ( $lalign & $ralign ) {
-			$align = 'center';
+			$align = 'middle';
 		} else if ( $ralign ) {
 			$align = 'right';
 		} else if ( $lalign ) {
@@ -119,6 +119,10 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
     public function render($mode, &$renderer, $data) {
 		/*
 		 * Todo: Copy DokuWiki's media renderer to get path to internal file.
+		 * 
+		 * Doesn't work to link to file directly.  Maybe need fetch.php?
+		 * Eg. <http://www.zoology.ubc.ca/~rikblok/wiki/lib/exe/fetch.php?media=playground%3A2012-07_diffusion_2012-07-27.nlogo>
+		 * or DOKU_INC.'lib/exe/fetch.php?media=playground%3A2012-07_diffusion_2012-07-27.nlogo'
 		*/
 		global $ID;
 		
@@ -130,6 +134,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$renderer->doc .= 'File not found: ' . $src;
 			return true;
 		}
+		// testing fetch.php
+		$src = DOKU_INC.'lib/exe/fetch.php?media=playground%3A2012-07_diffusion_2012-07-27.nlogo';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
 								. '    archive="'.DOKU_PLUGIN.'netlogo/netlogolite/5.0.1/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
