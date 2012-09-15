@@ -141,7 +141,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$src = DOKU_INC.'data/media/playground/test.nlogo';
 		$renderer->doc .= file_get_contents($src);
 		// should print nlogo file contents on page
-'
 /*
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
 								. '    archive="'.DOKU_PLUGIN.'netlogo/libraries/5.0.1/NetLogoLite.jar"'
