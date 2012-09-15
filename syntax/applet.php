@@ -137,11 +137,12 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		// testing fetch.php
 		$src = DOKU_PLUGIN.'netlogo/syntax/servefile.php';
 		
+/*
 		// debugging
 		$src = DOKU_INC.'data/media/playground/test.nlogo';
 		$renderer->doc .= file_get_contents($src);
 		// should print nlogo file contents on page
-/*
+*/
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
 								. '    archive="'.DOKU_PLUGIN.'netlogo/libraries/5.0.1/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
@@ -153,7 +154,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
-*/
         return true;
     }
 }
