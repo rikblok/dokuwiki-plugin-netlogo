@@ -128,10 +128,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			return true;
 		}
 		
-		// debugging
-		$renderer->doc .= "<p>Ugh</p>";
-		return true;
-		
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
 								. '    archive="'.DOKU_PLUGIN.'netlogo/libraries/5.0.1/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
