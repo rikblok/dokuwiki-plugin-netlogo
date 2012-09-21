@@ -134,8 +134,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$renderer->doc .= 'File not found: ' . $src;
 			return true;
 		}
-		// testing fetch.php
-		$src = DOKU_PLUGIN.'netlogo/syntax/servefile.php';
+		// testing fetch
+//		$src = DOKU_PLUGIN.'netlogo/syntax/servefile.php';
+		$src = 'servefile.php';
 		
 /*
 		// debugging
