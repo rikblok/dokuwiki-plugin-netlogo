@@ -120,6 +120,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		global $ID;
 		
         if($mode != 'xhtml') return false;
+		// $src not being used yet.  Should be passed parameter to servefile.php [Rik, 2012-09-21]
 		$src = $data['src'];
 		resolve_mediaid(getNS($ID),$src,$exists);
 		$src = mediaFN($src);
@@ -136,7 +137,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
-								. '      value="servefile.php">'
+//								. '      value="servefile.php">'
+								. '      value="test.nlogo">'
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
