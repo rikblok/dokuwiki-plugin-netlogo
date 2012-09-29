@@ -15,7 +15,7 @@ if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 // debugging: $src should be passed from applet.php [Rik, 2012-09-21]
 $src = DOKU_PLUGIN.'netlogo/libraries/5.0.1/test.nlogo';
 */
-$src = 'data/media/playground/test.nlogo';
+$src = '../../../../../data/media/playground/test.nlogo';
 
 echo file_get_contents($src);
 //$renderer->doc .= '<code>'.file_get_contents($src).'</code>';
