@@ -141,7 +141,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
 //								. '      value="servefile.php">' // debugging [Rik, 2012-09-28]
-								. '      value="test.nlogo">' // debugging [Rik, 2012-09-28]
+								. '      value="data/media/playground/test.nlogo">' // debugging [Rik, 2012-09-28]
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
