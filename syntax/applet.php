@@ -65,7 +65,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 		// Logic = what's that ;)...
 		if ( $lalign & $ralign ) {
-			$align = 'middle';
+			$align = 'center';
 		} else if ( $ralign ) {
 			$align = 'right';
 		} else if ( $lalign ) {
@@ -129,6 +129,14 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			return true;
 		}
 		
+		// special handling for center
+		$pcenter = false;
+		if (!is_null($data['align']) && $data['align']==='center') {
+			$pcenter = true;
+			$data['align']=null;
+		}
+		
+		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
 								. '    archive="lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"'// debugging [Rik, 2012-09-28]
 //								. '    width="'.$data['width'].'" height="'.$data['height'].'"'; // debugging [Rik, 2012-09-28] - doesn't work, too small
@@ -142,6 +150,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
+		if ($pcenter) $renderer->doc .= '</p>';
         return true;
     }
 }
