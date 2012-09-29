@@ -129,6 +129,10 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			return true;
 		}
 		
+		// get width & height from file
+		$data['width']=818; // 844 works
+		$data['height']=511; // 690 works
+		
 		// special handling for center
 		$pcenter = false;
 		if (!is_null($data['align']) && $data['align']==='center') {
@@ -138,9 +142,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
-								. '    archive="lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"'// debugging [Rik, 2012-09-28]
-//								. '    width="'.$data['width'].'" height="'.$data['height'].'"'; // debugging [Rik, 2012-09-28] - doesn't work, too small
-								. '    width="844" height="690"'; // debugging [Rik, 2012-09-28] - works! So should always read size from file, don't let user specify
+								. '    archive="lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"'
+								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
