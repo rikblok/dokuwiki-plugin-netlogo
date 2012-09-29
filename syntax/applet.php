@@ -142,7 +142,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 								. '  <param name="DefaultModel"'
 //								. '      value="servefile.php">' // debugging [Rik, 2012-09-28]
 //								. '      value="data/media/playground/test.nlogo">' // debugging [Rik, 2012-09-28]
-								. '      value="lib/plugins/netlogo/libraries/5.0.1/test.nlogo">' // debugging [Rik, 2012-09-28]
+//								. '      value="lib/plugins/netlogo/libraries/5.0.1/test.nlogo">' // debugging [Rik, 2012-09-28]
+								. '      value="lib/plugins/netlogo/libraries/5.0.1/servefile.php">' // debugging [Rik, 2012-09-28]
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
