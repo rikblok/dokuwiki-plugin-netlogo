@@ -135,7 +135,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //								. '    archive="/www/rikblok/wiki/lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"' // debugging [Rik, 2012-09-28]
 //								. '    archive="/~rikblok/wiki/lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"' // debugging [Rik, 2012-09-28]
 								. '    archive="lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"'// debugging [Rik, 2012-09-28]
-								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
+//								. '    width="'.$data['width'].'" height="'.$data['height'].'"'; // debugging [Rik, 2012-09-28]
+								. '    width="844" height="690"'; // debugging [Rik, 2012-09-28]
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
