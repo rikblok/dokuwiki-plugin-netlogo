@@ -135,15 +135,15 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //								. '    archive="/www/rikblok/wiki/lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"' // debugging [Rik, 2012-09-28]
 //								. '    archive="/~rikblok/wiki/lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"' // debugging [Rik, 2012-09-28]
 								. '    archive="lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"'// debugging [Rik, 2012-09-28]
-//								. '    width="'.$data['width'].'" height="'.$data['height'].'"'; // debugging [Rik, 2012-09-28]
-								. '    width="844" height="690"'; // debugging [Rik, 2012-09-28]
+//								. '    width="'.$data['width'].'" height="'.$data['height'].'"'; // debugging [Rik, 2012-09-28] - doesn't work, too small
+								. '    width="844" height="690"'; // debugging [Rik, 2012-09-28] - works! So should always read size from file, don't let user specify
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
 //								. '      value="servefile.php">' // debugging [Rik, 2012-09-28]
-//								. '      value="data/media/playground/test.nlogo">' // debugging [Rik, 2012-09-28] - 403 Forbidden
-								. '      value="lib/plugins/netlogo/libraries/5.0.1/test.nlogo">' // debugging [Rik, 2012-09-28] - File accessible
+								. '      value="data/media/playground/test.nlogo">' // debugging [Rik, 2012-09-28] - 403 Forbidden
+//								. '      value="lib/plugins/netlogo/libraries/5.0.1/test.nlogo">' // debugging [Rik, 2012-09-28] - File accessible - works!
 //								. '      value="lib/plugins/netlogo/libraries/5.0.1/servefile.php">' // debugging [Rik, 2012-09-28]
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
