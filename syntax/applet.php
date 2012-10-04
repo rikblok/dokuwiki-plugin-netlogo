@@ -4,7 +4,14 @@
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Rik Blok <rik.blok@ubc.ca>
- * 
+ *
+ * ToDo:
+ *	* maybe copy $src to temp file with random name?  That might be safer than servefile.php.  See tempnam().
+ *	* maybe make .nlogo file parsing a method?
+ *
+ * Documentation:
+ * NetLogo model file format <https://github.com/NetLogo/NetLogo/wiki/Model-file-format>
+ *
  * Acknowledgements:
  * Thanks to Stylianos Dritsas for the applet plugin 
  *   <https://www.dokuwiki.org/plugin:applet>.
@@ -149,7 +156,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
 //								. '      value="data/media/playground/test.nlogo">' // debugging [Rik, 2012-09-28] - 403 Forbidden, applet gives runtime error
-								. '      value="lib/plugins/netlogo/inc/servefile.php">' // debugging [Rik, 2012-09-28] - works!
+//								. '      value="lib/plugins/netlogo/inc/servefile.php">' // debugging [Rik, 2012-09-28] - works!
+								. '      value="lib/exe/fetch.php?media=playground:test.nlogo">' // debugging [Rik, 2012-10-03]
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
