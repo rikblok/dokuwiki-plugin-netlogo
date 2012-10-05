@@ -138,8 +138,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
 		// copy src to temp file with unique name (so it can't be guessed)
 		$tmpfname = tempnam(sys_get_temp_dir(), 'dw_nl_'); // good 
-		copy($src, $tempfname);   // copy NetLogo source into temp file
-		chmod($tempfname,0644); // grant Java permission to read temp file
+		copy($src, $tmpfname);   // copy NetLogo source into temp file
+		chmod($tmpfname,0644); // grant Java permission to read temp file
 		
 		// get width & height from file
 		$data['width']=818; // 844 works
@@ -163,7 +163,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //								. '      value="data/media/playground/test.nlogo">' // debugging [Rik, 2012-09-28] - 403 Forbidden, applet gives runtime error
 //								. '      value="lib/plugins/netlogo/inc/servefile.php">' // debugging [Rik, 2012-09-28] - works!
 //								. '      value="lib/exe/fetch.php?media=playground:test.nlogo">' // debugging [Rik, 2012-10-03] - 403 Forbidden, applet gives runtime error
-								. '      value="'.$tempfname.'">' // debugging [Rik, 2012-10-05]
+								. '      value="'.$tmpfname.'">' // debugging [Rik, 2012-10-05]
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
