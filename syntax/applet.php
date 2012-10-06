@@ -165,6 +165,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		// when should the servefile.php link expire?
 		$expires = time()+min(max($conf['cachetime'],10), 3600); // expires in cachetime, but no less than 10 seconds or more than 1 hr
 		
+		// generate token for servefile.php to authorize, use $uuid as salt.  servefile.php must be able to generate same token or it won't serve file.
+		$token=crypt($src.$expires,$uuid);
+		
 		// get width & height from file
 		$data['width']=818; // 844 works
 		$data['height']=511; // 690 works
@@ -188,7 +191,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //								. '      value="lib/plugins/netlogo/inc/servefile.php">' // debugging [Rik, 2012-09-28] - works!
 //								. '      value="lib/exe/fetch.php?media=playground:test.nlogo">' // debugging [Rik, 2012-10-03] - 403 Forbidden, applet gives runtime error
 //								. '      value="'.$tmpfname.'">' // debugging [Rik, 2012-10-05] - temp file exists but not read not permitted for either sys_get_temp_dir or 'data/tmp'
-								. '      value="lib/plugins/netlogo/inc/servefile.php?expires='.$expires.'">' // debugging [Rik, 2012-10-05] - testing $expires
+								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.$token.'">' // debugging [Rik, 2012-10-05] - testing $expires
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
