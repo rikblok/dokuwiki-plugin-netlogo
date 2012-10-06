@@ -19,7 +19,7 @@ if (!defined('DOKU_INC')) define('DOKU_INC', "../../../../"); // assumes servefi
 // check token
 $uuidfile = DOKU_INC.'data/tmp/plugin_netlogo_uuid';
 $uuid = file_get_contents($uuidfile);
-$expectedtoken=crypt($src.$expires,$uuid);
+$expectedtoken=crypt($src.$expires,$uuid); // error: can change expires=... in url  (eg. increment by 1) with no problem.  Why? Maybe crypt() has max length for $str? Or am I misusing crypt()? [Rik, 2012-10-06]
 if ($token != $expectedtoken) die();
 
 // check expiration
