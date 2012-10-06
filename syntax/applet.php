@@ -6,8 +6,9 @@
  * @author  Rik Blok <rik.blok@ubc.ca>
  *
  * ToDo:
- *	* maybe copy $src to temp file with random name?  That might be safer than servefile.php.  See tempnam().
- *	* maybe make .nlogo file parsing a method?
+ *	* if 'conf/local.php' touched since uuidfile created then recreate [Rik, 2012-10-05]
+ *	* maybe copy $src to temp file with random name?  That might be safer than servefile.php.  See tempnam(). [Rik, 2012-09-28]
+ *	* maybe make .nlogo file parsing a method? [Rik, 2012-09-28]
  *
  * Documentation:
  * NetLogo model file format <https://github.com/NetLogo/NetLogo/wiki/Model-file-format>
@@ -142,7 +143,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 		
 		// Will pass token to servefile.php to authorize.  First generate secret uuid if not found.
-		$uuidfile = 'data/tmp/netlogo_uuid';
+		$uuidfile = 'data/tmp/plugin_netlogo_uuid';
 		if (!file_exists($uuidfile)) {
 			if (!$handle = fopen($uuidfile, 'w')) {
 				$renderer->doc .= '<p>NetLogo: Cannot create UUID ' . $uuidfile . '</p>';
@@ -160,14 +161,14 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
 		// copy src to temp file with unique name (so it can't be guessed)
 //		$tmpfname = tempnam(sys_get_temp_dir(), 'dw_nl_'); // debugging [Rik, 2012-10-05] - works but browser can't read files in sys_get_temp_dir
-		$tmpfname = tempnam('data/tmp', 'dw_nl_'); // debugging [Rik, 2012-10-05] - .htaccess for data folder blocks access
-		copy($src, $tmpfname);   // copy NetLogo source into temp file
+//		$tmpfname = tempnam('data/tmp', 'dw_nl_'); // debugging [Rik, 2012-10-05] - .htaccess for data folder blocks access
+//		copy($src, $tmpfname);   // copy NetLogo source into temp file
 //		echo '<pre>'.file_get_contents($tmpfname).'</pre>';	// debugging [Rik, 2012-10-05]
-		if (chmod($tmpfname,0644)) { // grant Java permission to read temp file
-			echo 'chmod ok<br />';
-		} else {
-			echo 'chmod failed<br />';
-		}
+//		if (chmod($tmpfname,0644)) { // grant Java permission to read temp file
+//			echo 'chmod ok<br />';
+//		} else {
+//			echo 'chmod failed<br />';
+//		}
 		// chmod ok but Apache tmp folder not accessible to browser
 		
 		// get width & height from file
@@ -193,7 +194,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //								. '      value="lib/plugins/netlogo/inc/servefile.php">' // debugging [Rik, 2012-09-28] - works!
 //								. '      value="lib/exe/fetch.php?media=playground:test.nlogo">' // debugging [Rik, 2012-10-03] - 403 Forbidden, applet gives runtime error
 //								. '      value="'.$tmpfname.'">' // debugging [Rik, 2012-10-05] - temp file exists but not read not permitted for either sys_get_temp_dir or 'data/tmp'
-								. '      value="lib/plugins/netlogo/inc/servefile.php?uuid='.$uuid.'">' // debugging [Rik, 2012-10-05] - testing uuid creation
+								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.$src.'">' // debugging [Rik, 2012-10-05] - testing src name
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
