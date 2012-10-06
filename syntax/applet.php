@@ -25,6 +25,7 @@ if (!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
 if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 
 require_once DOKU_PLUGIN.'syntax.php';
+require_once DOKU_PLUGIN.'netlogo/inc/uuid.php';
 
 class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
     public function getType() {
@@ -130,17 +131,38 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		// debugging: $src not being used yet.  Should pass as parameter to servefile.php [Rik, 2012-09-21]
 		$src = $data['src'];
 		resolve_mediaid(getNS($ID),$src,$exists);
+		if(auth_quickaclcheck(getNS($src).':X') < AUTH_READ){ // auth_quickaclcheck() mimicked from http://xref.dokuwiki.org/reference/dokuwiki/_functions/checkfilestatus.html
+			$renderer->doc .= '<p>NetLogo: File not allowed: ' . $src . '</p>';
+			return true;
+		}
 		$src = mediaFN($src);
 		if (!$exists) {
 			$renderer->doc .= '<p>NetLogo: File not found: ' . $src . '</p>';
 			return true;
 		}
 		
+		// Will pass token to servefile.php to authorize.  First generate secret uuid if not found.
+		$uuidfile = 'data/tmp/netlogo_uuid';
+		if (!file_exists($uuidfile)) {
+			if (!$handle = fopen($uuidfile, 'w')) {
+				$renderer->doc .= '<p>NetLogo: Cannot create UUID ' . $uuidfile . '</p>';
+				return true;
+			}
+			// Write uuid to our opened file.
+			if (fwrite($handle, uuid4()) === FALSE) {
+				$renderer->doc .= '<p>NetLogo: Cannot write UUID to ' . $uuidfile . '</p>';
+				return true;
+			}
+			fclose($handle);		
+		}
+		// read uuid from file
+		$uuid = file_get_contents($uuidfile);
+		
 		// copy src to temp file with unique name (so it can't be guessed)
-//		$tmpfname = tempnam(sys_get_temp_dir(), 'dw_nl_'); // debugging [Rik, 2012-10-05] - works but browser can't read files in syst_get_temp_dir
-		$tmpfname = tempnam('data/tmp', 'dw_nl_'); // good 
+//		$tmpfname = tempnam(sys_get_temp_dir(), 'dw_nl_'); // debugging [Rik, 2012-10-05] - works but browser can't read files in sys_get_temp_dir
+		$tmpfname = tempnam('data/tmp', 'dw_nl_'); // debugging [Rik, 2012-10-05] - .htaccess for data folder blocks access
 		copy($src, $tmpfname);   // copy NetLogo source into temp file
-		echo '<pre>'.file_get_contents($tmpfname).'</pre>';	// debugging [Rik, 2012-10-05]
+//		echo '<pre>'.file_get_contents($tmpfname).'</pre>';	// debugging [Rik, 2012-10-05]
 		if (chmod($tmpfname,0644)) { // grant Java permission to read temp file
 			echo 'chmod ok<br />';
 		} else {
@@ -170,7 +192,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //								. '      value="data/media/playground/test.nlogo">' // debugging [Rik, 2012-09-28] - 403 Forbidden, applet gives runtime error
 //								. '      value="lib/plugins/netlogo/inc/servefile.php">' // debugging [Rik, 2012-09-28] - works!
 //								. '      value="lib/exe/fetch.php?media=playground:test.nlogo">' // debugging [Rik, 2012-10-03] - 403 Forbidden, applet gives runtime error
-								. '      value="'.$tmpfname.'">' // debugging [Rik, 2012-10-05]
+//								. '      value="'.$tmpfname.'">' // debugging [Rik, 2012-10-05] - temp file exists but not read not permitted for either sys_get_temp_dir or 'data/tmp'
+								. '      value="lib/plugins/netlogo/inc/servefile.php?uuid='.$uuid.'">' // debugging [Rik, 2012-10-05] - testing uuid creation
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
