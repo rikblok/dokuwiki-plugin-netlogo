@@ -26,7 +26,7 @@ if (!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
 if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 
 require_once DOKU_PLUGIN.'syntax.php';
-require_once DOKU_PLUGIN.'netlogo/inc/uuid.php';
+require_once DOKU_PLUGIN.'netlogo/inc/support.php';
 
 class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
     public function getType() {
@@ -141,6 +141,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$renderer->doc .= '<p>NetLogo: File not found: ' . $src . '</p>';
 			return true;
 		}
+		// $src is currently realpath.  Turn into relative path from DOKU_INC.
+		$src = relativePath(DOKU_INC,$src);
 		
 		// Will pass token to servefile.php to authorize.  First generate secret uuid if not found.
 		$uuidfile = 'data/tmp/plugin_netlogo_uuid';
