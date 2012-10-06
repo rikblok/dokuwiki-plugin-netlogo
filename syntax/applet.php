@@ -191,7 +191,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //								. '      value="lib/plugins/netlogo/inc/servefile.php">' // debugging [Rik, 2012-09-28] - works!
 //								. '      value="lib/exe/fetch.php?media=playground:test.nlogo">' // debugging [Rik, 2012-10-03] - 403 Forbidden, applet gives runtime error
 //								. '      value="'.$tmpfname.'">' // debugging [Rik, 2012-10-05] - temp file exists but not read not permitted for either sys_get_temp_dir or 'data/tmp'
-								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.$token.'">' // debugging [Rik, 2012-10-05] - testing $expires
+								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">' // debugging [Rik, 2012-10-05] - works!
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';

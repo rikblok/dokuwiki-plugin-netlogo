@@ -6,13 +6,30 @@
  * @author  Rik Blok <rik.blok@ubc.ca>
  *
  * ToDo:
- *	* $src should be passed from applet.php [Rik, 2012-09-21]
- *	* check permissions of $src to make sure user is allowed to view. [Rik, 2012-09-28]
  */
 
-$src = '../../../../data/media/playground/test.nlogo'; // debugging [Rik, 2012-09-28] - works!
-//$src = 'data/media/playground/test.nlogo'; // debugging [Rik, 2012-09-28] - doesn't work, returns blank file
+// get url parameters
+$src = $_GET['src'];
+$expires = $_GET['expires'];
+$token = $_GET['token'];
 
+// relative path to DokuWiki root
+if (!defined('DOKU_INC')) define('DOKU_INC', "../../../../"); // assumes servefile.php nested four levels beneath root, in DOKU_INC.'lib/plugins/netlogo/inc/'
+
+// check token
+$uuidfile = DOKU_INC.'data/tmp/plugin_netlogo_uuid';
+$uuid = file_get_contents($uuidfile);
+$expectedtoken=crypt($src.$expires,$uuid);
+if ($token != $expectedtoken) die();
+
+// check expiration
+if (time() > $expires) die();
+
+// check file exists and is readable
+$src = DOKU_INC . $src;
+if (!is_readable($src)) die();
+
+// all ok, serve file
 echo file_get_contents($src);
 
 // vim:ts=4:sw=4:et:
