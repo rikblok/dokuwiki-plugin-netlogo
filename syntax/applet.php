@@ -140,7 +140,11 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$tmpfname = tempnam(sys_get_temp_dir(), 'dw_nl_'); // good 
 		copy($src, $tmpfname);   // copy NetLogo source into temp file
 		echo '<pre>'.file_get_contents($tmpfname).'</pre>';	// debugging [Rik, 2012-10-05]
-		chmod($tmpfname,0644); // grant Java permission to read temp file
+		if (chmod($tmpfname,0644)) { // grant Java permission to read temp file
+			echo 'chmod ok<br />';
+		} else {
+			echo 'chmod failed<br />';
+		}
 		
 		// get width & height from file
 		$data['width']=818; // 844 works
