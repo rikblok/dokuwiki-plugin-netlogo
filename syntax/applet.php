@@ -137,7 +137,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 		
 		// copy src to temp file with unique name (so it can't be guessed)
-		$tmpfname = tempnam(sys_get_temp_dir(), 'dw_nl_'); // good 
+//		$tmpfname = tempnam(sys_get_temp_dir(), 'dw_nl_'); // debugging [Rik, 2012-10-05] - works but browser can't read files in syst_get_temp_dir
+		$tmpfname = tempnam('data/tmp', 'dw_nl_'); // good 
 		copy($src, $tmpfname);   // copy NetLogo source into temp file
 		echo '<pre>'.file_get_contents($tmpfname).'</pre>';	// debugging [Rik, 2012-10-05]
 		if (chmod($tmpfname,0644)) { // grant Java permission to read temp file
@@ -145,6 +146,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		} else {
 			echo 'chmod failed<br />';
 		}
+		// chmod ok but Apache tmp folder not accessible to browser
 		
 		// get width & height from file
 		$data['width']=818; // 844 works
