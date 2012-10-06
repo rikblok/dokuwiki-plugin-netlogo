@@ -6,10 +6,9 @@
  * @author  Rik Blok <rik.blok@ubc.ca>
  *
  * ToDo:
- *	* generate token from $uuid, $src, & $expires [Rik, 2012-10-05]
  *	* if 'conf/local.php' touched since uuidfile created then recreate.  See http://www.jandecaluwe.com/testwiki/doku.php/navigation:sidebar_details#generating_the_sidebar_xhtml for demo. [Rik, 2012-10-05]
- *	* maybe copy $src to temp file with random name?  That might be safer than servefile.php.  See tempnam(). [Rik, 2012-09-28]
  *	* maybe make .nlogo file parsing a method? [Rik, 2012-09-28]
+ *	* servefile.php link maybe should expire faster.  Why not just 10 seconds?  That should be enough time for page to load.  [Rik, 2012-10-06]
  *
  * Documentation:
  * NetLogo model file format <https://github.com/NetLogo/NetLogo/wiki/Model-file-format>
@@ -142,8 +141,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$renderer->doc .= '<p>NetLogo: File not found: ' . $src . '</p>';
 			return true;
 		}
-		// $src is currently realpath.  Turn into relative path from DOKU_INC.
-		$src = relativePath(DOKU_INC,$src);
+		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
+		$src = relativePath(DOKU_INC.'data/media/',$src);
 		
 		// Will pass token to servefile.php to authorize.  First generate secret uuid if not found.
 		$uuidfile = 'data/tmp/plugin_netlogo_uuid';
@@ -166,8 +165,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$expires = time()+min(max($conf['cachetime'],10), 3600); // expires in cachetime, but no less than 10 seconds or more than 1 hr
 		
 		// generate token for servefile.php to authorize, use $uuid as salt.  servefile.php must be able to generate same token or it won't serve file.
-		$token=crypt($src.$expires,$uuid);
-		
+		// $token=crypt($src.$expires,$uuid); // debugging [Rik, 2012-10-06] - only uses first 8 chars of $src
+		$token=hash('sha256',$uuid.$src.$expires); // debugging [Rik, 2012-10-06] - replace crypt() for more than first 8 chars
+
 		// get width & height from file
 		$data['width']=818; // 844 works
 		$data['height']=511; // 690 works
