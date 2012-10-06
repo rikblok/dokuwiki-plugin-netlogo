@@ -6,7 +6,8 @@
  * @author  Rik Blok <rik.blok@ubc.ca>
  *
  * ToDo:
- *	* if 'conf/local.php' touched since uuidfile created then recreate [Rik, 2012-10-05]
+ *	* generate token from $uuid, $src, & $expires [Rik, 2012-10-05]
+ *	* if 'conf/local.php' touched since uuidfile created then recreate.  See http://www.jandecaluwe.com/testwiki/doku.php/navigation:sidebar_details#generating_the_sidebar_xhtml for demo. [Rik, 2012-10-05]
  *	* maybe copy $src to temp file with random name?  That might be safer than servefile.php.  See tempnam(). [Rik, 2012-09-28]
  *	* maybe make .nlogo file parsing a method? [Rik, 2012-09-28]
  *
@@ -126,7 +127,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
     }
 
     public function render($mode, &$renderer, $data) {
-		global $ID;
+		global $ID, $conf;
 		
         if($mode != 'xhtml') return false;
 		// debugging: $src not being used yet.  Should pass as parameter to servefile.php [Rik, 2012-09-21]
@@ -161,17 +162,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		// read uuid from file
 		$uuid = file_get_contents($uuidfile);
 		
-		// copy src to temp file with unique name (so it can't be guessed)
-//		$tmpfname = tempnam(sys_get_temp_dir(), 'dw_nl_'); // debugging [Rik, 2012-10-05] - works but browser can't read files in sys_get_temp_dir
-//		$tmpfname = tempnam('data/tmp', 'dw_nl_'); // debugging [Rik, 2012-10-05] - .htaccess for data folder blocks access
-//		copy($src, $tmpfname);   // copy NetLogo source into temp file
-//		echo '<pre>'.file_get_contents($tmpfname).'</pre>';	// debugging [Rik, 2012-10-05]
-//		if (chmod($tmpfname,0644)) { // grant Java permission to read temp file
-//			echo 'chmod ok<br />';
-//		} else {
-//			echo 'chmod failed<br />';
-//		}
-		// chmod ok but Apache tmp folder not accessible to browser
+		// when should the servefile.php link expire?
+		$expires = time()+min(max($conf['cachetime'],10), 3600); // expires in cachetime, but no less than 10 seconds or more than 1 hr
 		
 		// get width & height from file
 		$data['width']=818; // 844 works
@@ -196,7 +188,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //								. '      value="lib/plugins/netlogo/inc/servefile.php">' // debugging [Rik, 2012-09-28] - works!
 //								. '      value="lib/exe/fetch.php?media=playground:test.nlogo">' // debugging [Rik, 2012-10-03] - 403 Forbidden, applet gives runtime error
 //								. '      value="'.$tmpfname.'">' // debugging [Rik, 2012-10-05] - temp file exists but not read not permitted for either sys_get_temp_dir or 'data/tmp'
-								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.$src.'">' // debugging [Rik, 2012-10-05] - testing src name
+								. '      value="lib/plugins/netlogo/inc/servefile.php?expires='.$expires.'">' // debugging [Rik, 2012-10-05] - testing $expires
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
