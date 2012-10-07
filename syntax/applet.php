@@ -8,7 +8,6 @@
  * ToDo:
  *	* if 'conf/local.php' touched since uuidfile created then recreate.  See http://www.jandecaluwe.com/testwiki/doku.php/navigation:sidebar_details#generating_the_sidebar_xhtml for demo. [Rik, 2012-10-05]
  *	* maybe make .nlogo file parsing a method? [Rik, 2012-09-28]
- *	* servefile.php link maybe should expire faster.  Why not just 10 seconds?  That should be enough time for page to load.  [Rik, 2012-10-06]
  *
  * Documentation:
  * NetLogo model file format <https://github.com/NetLogo/NetLogo/wiki/Model-file-format>
@@ -162,7 +161,11 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$uuid = file_get_contents($uuidfile);
 		
 		// when should the servefile.php link expire?
-		$expires = time()+min(max($conf['cachetime'],10), 3600); // expires in cachetime, but no less than 10 seconds or more than 1 hr
+		$expires = time()+min(max($conf['cachetime'],30), 3600); // expires in cachetime, but no less than 30 seconds or more than 1 hr
+		
+		// disable caching of this page to ensure parameters passed to servefile.php are always fresh [Rik, 2012-10-06]
+        $renderer->info['cache'] = false;
+
 		
 		// generate token for servefile.php to authorize, use $uuid as salt.  servefile.php must be able to generate same token or it won't serve file.
 		// $token=crypt($src.$expires,$uuid); // debugging [Rik, 2012-10-06] - only uses first 8 chars of $src
