@@ -100,8 +100,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$param = '';
 		}
 
-		//parse width and height
-		if(preg_match('#(\d+)(x(\d+))?#i',$param,$size)){
+		//parse width and height (must be first parameter)
+		if (preg_match('#^(\d+)(x(\d+))?#i',$param,$size)){
 			($size[1]) ? $w = $size[1] : $w = NULL;
 			($size[3]) ? $h = $size[3] : $h = NULL;
 		} else {
@@ -109,9 +109,19 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$h = NULL;
 		}
 
-		// default width and height
-		if (is_null($w)) $w = '640';
-		if (is_null($h)) $h = '480';
+		// default width and height (from Untitled.nlogo). Todo: extract from .nlogo file.
+		if (is_null($w)) $w = '644';
+		if (is_null($h)) $h = '470';
+		
+		// parse version number.  See all versions: http://ccl.northwestern.edu/netlogo/oldversions.shtml
+		if (preg_match('#version=(\d+\.\d+(\.?[\w]*)?)#',$param,$version)){
+			$ver = $version[1];
+		} else {
+			$ver = NULL;
+		}
+		
+		// default version
+		if (is_null($ver)) $ver = '5.0.1';
 		
 		$params = array(
 			'src'=>$src,
@@ -119,6 +129,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			'align'=>$align,
 			'width'=>$w,
 			'height'=>$h,
+			'version'=>$ver;
 		);
 
 		return $params;
@@ -161,20 +172,15 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$uuid = file_get_contents($uuidfile);
 		
 		// when should the servefile.php link expire?
-		$expires = time()+min(max($conf['cachetime'],30), 3600); // expires in cachetime, but no less than 30 seconds or more than 1 hr
+		$expires = time()+min(max($conf['cachetime'],60), 3600); // expires in cachetime, but no less than 1 minute or more than 1 hour
 		
 		// disable caching of this page to ensure parameters passed to servefile.php are always fresh [Rik, 2012-10-06]
         $renderer->info['cache'] = false;
 
-		
 		// generate token for servefile.php to authorize, use $uuid as salt.  servefile.php must be able to generate same token or it won't serve file.
 		// $token=crypt($src.$expires,$uuid); // debugging [Rik, 2012-10-06] - only uses first 8 chars of $src
 		$token=hash('sha256',$uuid.$src.$expires); // debugging [Rik, 2012-10-06] - replace crypt() for more than first 8 chars
 
-		// get width & height from file
-		$data['width']=818; // 844 works
-		$data['height']=511; // 690 works
-		
 		// special handling for center
 		$pcenter = false;
 		if (!is_null($data['align']) && $data['align']==='center') {
