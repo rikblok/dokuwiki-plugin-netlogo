@@ -129,7 +129,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			'align'=>$align,
 			'width'=>$w,
 			'height'=>$h,
-			'version'=>$ver;
+			'version'=>$ver,
 		);
 
 		return $params;
