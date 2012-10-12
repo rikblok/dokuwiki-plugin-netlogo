@@ -8,6 +8,9 @@
  * ToDo:
  *	* if 'conf/local.php' touched since uuidfile created then recreate.  See http://www.jandecaluwe.com/testwiki/doku.php/navigation:sidebar_details#generating_the_sidebar_xhtml for demo. [Rik, 2012-10-05]
  *	* maybe make .nlogo file parsing a method? [Rik, 2012-09-28]
+ *	* read size from .nlogo file if not passed as parameter [Rik, 2012-10-12]
+ *	* read version from .nlogo file if not passed as parameter [Rik, 2012-10-12]
+ *	* download NetLogo jars if version not present [Rik, 2012-10-12]
  *
  * Documentation:
  * NetLogo model file format <https://github.com/NetLogo/NetLogo/wiki/Model-file-format>
@@ -190,7 +193,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
-								. '    archive="lib/plugins/netlogo/libraries/5.0.1/NetLogoLite.jar"'
+								. '    archive="lib/plugins/netlogo/libraries/'.$data['version'].'/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
