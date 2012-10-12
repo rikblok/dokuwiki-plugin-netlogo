@@ -142,7 +142,14 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		global $ID, $conf;
 		
         if($mode != 'xhtml') return false;
-		// debugging: $src not being used yet.  Should pass as parameter to servefile.php [Rik, 2012-09-21]
+		
+		// check if jar files exist
+		if (!file_exists('lib/plugins/netlogo/libraries/'.$data['version'].'/NetLogoLite.jar')) {
+			$renderer->doc .= '<p>NetLogo: NetLogoLite.jar version not found: ' . $data['version'] . '</p>';
+			return true;
+		}
+		
+		// check .nlogo file read permission
 		$src = $data['src'];
 		resolve_mediaid(getNS($ID),$src,$exists);
 		if(auth_quickaclcheck(getNS($src).':X') < AUTH_READ){ // auth_quickaclcheck() mimicked from http://xref.dokuwiki.org/reference/dokuwiki/_functions/checkfilestatus.html
