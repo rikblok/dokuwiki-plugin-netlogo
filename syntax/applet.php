@@ -152,6 +152,16 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		// default version
 		if (is_null($ver)) $ver = '5.0.1';
 		
+		// download libraries?
+		$libjar='lib/plugins/netlogo/libraries/'.$ver.'/NetLogoLite.jar';
+		$libjargz='lib/plugins/netlogo/libraries/'.$ver.'/NetLogoLite.jar.pack.gz';
+		$urljar='http://ccl.northwestern.edu/netlogo/'.$ver.'/NetLogoLite.jar';
+		$urljargz='http://ccl.northwestern.edu/netlogo/'.$ver.'/NetLogoLite.jar.pack.gz';
+		$dirname = dirname($libjar);
+		if (!is_dir($dirname))			mkdir($dirname, 0755, true);
+		if (!file_exists($libjar))		io_download($urljar,    $libjar, false, '', 35904890); // max size = 10x latest (v5.0.2)
+		if (!file_exists($libjargz))	io_download($urljargz, $libjargz, false, '', 5394750); // max size = 10x latest (v5.0.2)
+		
 		$params = array(
 			'src'=>$src,
 			'title'=>$link[1],
