@@ -46,7 +46,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		 * /inc/parser/parser.php:class Doku_Parser_Mode_media
 		 * http://xref.dokuwiki.org/reference/dokuwiki/_classes/doku_parser_mode_media.html
 		*/
-        return 317; // after plugin:applet
+        return 317; // after plugin:applet (316), before media (320).  See https://www.dokuwiki.org/devel:parser:getsort_list
     }
 
 
@@ -66,7 +66,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		 * http://xref.dokuwiki.org/reference/dokuwiki/_functions/doku_handler_parse_media.html
 		*/
 		// Strip the opening and closing markup
-		$link = preg_replace(array('/^\{\{netlogo>/','/\}\}$/u'),'',$match);	
+		$link = preg_replace(array('/^\{\{/','/\}\}$/u'),'',$match);	
 		
 		// Split title from URL
 		$link = explode('|',$link,2);
