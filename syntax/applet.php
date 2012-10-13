@@ -139,7 +139,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 		// parse file to get contents
 		$nlogo = file_get_contents(mediaFN($src));
-		$nlogoparts = explode('@#$#@#$#@\n', $nlogo);
+		$nlogoparts = explode('@#$#@#$#@', $nlogo);
 		/*
 		[0] => code
 		[1] => interface
@@ -221,7 +221,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 		// debugging
 		$nlogo = file_get_contents($src);
-		$nlogoparts = explode('@#$#@#$#@\n', $nlogo);
+		$nlogoparts = explode('@#$#@#$#@', $nlogo);
 		$renderer->doc .= '<pre>Debugging:\n'.print_r($nlogoparts, true).'\n</pre>';
 
 		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
