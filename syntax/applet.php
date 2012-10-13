@@ -166,7 +166,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$ver = $version[1];
 		} else {
 			// otherwise, grab from .nlogo file
-			echo '<pre>'.$nlogoparts[4].'</pre>';
 			preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
 			$ver = $version[1];
 		}
@@ -221,7 +220,12 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
 		$src = relativePath(DOKU_INC.'data/media/',$src);
-		
+
+		// debugging
+		$nlogo = file_get_contents($src);
+		$nlogoparts = explode('@#$#@#$#@\n', $nlogo);
+		$renderer->doc .= '<pre>Debugging:\n'.print_r($nlogoparts, true).'\n</pre>';
+
 		// Will pass token to servefile.php to authorize.  First generate secret uuid if not found.
 		$uuidfile = 'data/tmp/plugin_netlogo_uuid';
 		if (!file_exists($uuidfile)) {
