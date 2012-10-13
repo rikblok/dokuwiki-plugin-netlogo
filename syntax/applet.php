@@ -51,7 +51,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('\{\{netlogo>[^\}]+\}\}',$mode,'plugin_netlogo_applet');
+//        $this->Lexer->addSpecialPattern('\{\{netlogo>[^\}]+\}\}',$mode,'plugin_netlogo_applet');	// replaced, look for {{*.nlogo}} instead of {{netlogo>*}} [Rik, 2012-10-12]
+        $this->Lexer->addSpecialPattern('\{\{[^\{\}]+\.nlogo(\?[^\}]+)?\s?\}\}',$mode,'plugin_netlogo_applet');	// look for {{*.nlogo}} instead of {{netlogo>*}}.  Todo: How to download file instead of running? [Rik, 2012-10-12]
 //        $this->Lexer->addEntryPattern('<FIXME>',$mode,'plugin_netlogo_applet');
     }
 
