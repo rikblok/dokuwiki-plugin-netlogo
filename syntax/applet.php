@@ -45,8 +45,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		/* Should be less than 320 as defined in
 		 * /inc/parser/parser.php:class Doku_Parser_Mode_media
 		 * http://xref.dokuwiki.org/reference/dokuwiki/_classes/doku_parser_mode_media.html
+		 * After plugin:applet (316), before media (320).  See https://www.dokuwiki.org/devel:parser:getsort_list
 		*/
-        return 317; // after plugin:applet (316), before media (320).  See https://www.dokuwiki.org/devel:parser:getsort_list
+        return 317;
     }
 
 
@@ -75,7 +76,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			{{ ugh.nlogo.x?818x611&version=5.0.1 }}
 			{{ ugh.nlogo.x?818x611&version=5.0.1}}
 		*/
-        // $this->Lexer->addSpecialPattern('\{\{[^\}\{]*?\.nlogo(\?.*)? ?\}\}',$mode,'plugin_netlogo_applet');
+		// $this->Lexer->addSpecialPattern('\{\{[^\}\{]*?\.nlogo(\?.*)? ?\}\}',$mode,'plugin_netlogo_applet');
 		// $this->Lexer->addSpecialPattern('\{\{[^\}]+\.nlogo(\?[^\}]+)?\s?\}\}',$mode,'plugin_netlogo_applet');
 //        $this->Lexer->addEntryPattern('<FIXME>',$mode,'plugin_netlogo_applet');
     }
