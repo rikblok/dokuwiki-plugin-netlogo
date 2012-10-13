@@ -166,6 +166,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$ver = $version[1];
 		} else {
 			// otherwise, grab from .nlogo file
+			echo '<pre>'.$nlogoparts[4].'</pre>';
 			preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
 			$ver = $version[1];
 		}
