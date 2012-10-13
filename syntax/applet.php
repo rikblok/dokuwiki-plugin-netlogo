@@ -198,7 +198,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 				[11] =>reserved by Michelle
 				[12] => (empty)
 			*/
-			$renderer->doc .= '<pre>Debugging:\n'.print_r($nlogoparts, true).'\n</pre>';
 
 			// version?
 			if (is_null($data['version'])) {
