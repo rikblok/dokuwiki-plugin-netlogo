@@ -137,25 +137,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$h = NULL;
 		}
 
-		// parse file to get contents
-		$nlogo = file_get_contents(mediaFN($src));
-		$nlogoparts = explode('@#$#@#$#@', $nlogo);
-		/*
-		[0] => code
-		[1] => interface
-		[2] => info
-		[3] => turtle shapes
-		[4] => NetLogo version
-		[5] => preview commands
-		[6] => system dynamics modeler
-		[7] => BehaviorSpace
-		[8] => HubNet client
-		[9] => link shapes
-		[10] =>model settings
-		[11] =>reserved by Michelle
-		[12] => (empty)
-		*/
-				
 		// default width and height (from Untitled.nlogo). Todo: extract from .nlogo file.
 		if (is_null($w)) $w = '644';
 		if (is_null($h)) $h = '470';
@@ -165,23 +146,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			// specified by user
 			$ver = $version[1];
 		} else {
-			// otherwise, grab from .nlogo file
-			preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
-			$ver = $version[1];
+			$ver = NULL;
 		}
-		
-		// download libraries? Todo: move root url to config option
-		$libjar='lib/plugins/netlogo/libraries/'.$ver.'/NetLogoLite.jar';
-		$libjargz='lib/plugins/netlogo/libraries/'.$ver.'/NetLogoLite.jar.pack.gz';
-		$copyright='lib/plugins/netlogo/libraries/'.$ver.'/copyright.html';
-		$urljar='http://ccl.northwestern.edu/netlogo/'.$ver.'/NetLogoLite.jar';
-		$urljargz='http://ccl.northwestern.edu/netlogo/'.$ver.'/NetLogoLite.jar.pack.gz';
-		$urlcopyright='http://ccl.northwestern.edu/netlogo/'.$ver.'/docs/copyright.html';
-		$dirname = dirname($libjar);
-		if (!is_dir($dirname))			mkdir($dirname, 0755, true);
-		if (!file_exists($libjar))		io_download($urljar,    $libjar, false, '', 35904890); // max size = 10x latest (v5.0.2)
-		if (!file_exists($libjargz))	io_download($urljargz, $libjargz, false, '', 5394750); // max size = 10x latest (v5.0.2)
-		if (!file_exists($copyright))	io_download($urlcopyright, $copyright, false, '', 268200); // max size = 10x latest (v5.0.2)
 		
 		$params = array(
 			'src'=>$src,
@@ -219,10 +185,48 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			return true;
 		}
 
-		// debugging
-		$nlogo = file_get_contents($src);
-		$nlogoparts = explode('@#$#@#$#@', $nlogo);
-		$renderer->doc .= '<pre>Debugging:\n'.print_r($nlogoparts, true).'\n</pre>';
+		// parse file to get contents
+		if (is_null($data['version']) || is_null($data['width']) || is_null($data['height'])) {
+			$nlogo = file_get_contents($src);
+			$nlogoparts = explode('@#$#@#$#@', $nlogo);
+			/*
+				[0] => code
+				[1] => interface
+				[2] => info
+				[3] => turtle shapes
+				[4] => NetLogo version
+				[5] => preview commands
+				[6] => system dynamics modeler
+				[7] => BehaviorSpace
+				[8] => HubNet client
+				[9] => link shapes
+				[10] =>model settings
+				[11] =>reserved by Michelle
+				[12] => (empty)
+			*/
+			$renderer->doc .= '<pre>Debugging:\n'.print_r($nlogoparts, true).'\n</pre>';
+
+			// version?
+			if (is_null($data['version'])) {
+				preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
+				$data['version'] = $version[1];
+			}
+		}
+		
+		// download libraries? Todo: move root url to config option
+		$libroot = 'lib/plugins/netlogo/libraries/'.$data['version'];
+		$urlroot = 'http://ccl.northwestern.edu/netlogo/'.$data['version'];
+		$libjar= $libroot.'/NetLogoLite.jar';
+		$libjargz= $libroot.'/NetLogoLite.jar.pack.gz';
+		$copyright= $libroot.'/copyright.html';
+		$urljar= $urlroot.'/NetLogoLite.jar';
+		$urljargz= $urlroot.'/NetLogoLite.jar.pack.gz';
+		$urlcopyright= $urlroot.'/docs/copyright.html';
+		$dirname = dirname($libjar);
+		if (!is_dir($dirname))			mkdir($dirname, 0755, true);
+		if (!file_exists($libjar))		io_download($urljar,    $libjar, false, '', 35904890); // max size = 10x latest (v5.0.2)
+		if (!file_exists($libjargz))	io_download($urljargz, $libjargz, false, '', 5394750); // max size = 10x latest (v5.0.2)
+		if (!file_exists($copyright))	io_download($urlcopyright, $copyright, false, '', 268200); // max size = 10x latest (v5.0.2)
 
 		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
 		$src = relativePath(DOKU_INC.'data/media/',$src);
