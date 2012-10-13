@@ -166,12 +166,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
         if($mode != 'xhtml') return false;
 		
-		// check if jar files exist
-		if (!file_exists('lib/plugins/netlogo/libraries/'.$data['version'].'/NetLogoLite.jar')) {
-			$renderer->doc .= '<p>NetLogo: NetLogoLite.jar version not found: ' . $data['version'] . '</p>';
-			return true;
-		}
-		
 		// check .nlogo file read permission
 		$src = $data['src'];
 		resolve_mediaid(getNS($ID),$src,$exists);
@@ -227,6 +221,13 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		if (!file_exists($libjar))		io_download($urljar,    $libjar, false, '', 35904890); // max size = 10x latest (v5.0.2)
 		if (!file_exists($libjargz))	io_download($urljargz, $libjargz, false, '', 5394750); // max size = 10x latest (v5.0.2)
 		if (!file_exists($copyright))	io_download($urlcopyright, $copyright, false, '', 268200); // max size = 10x latest (v5.0.2)
+
+		// check if jar files exist
+		if (!file_exists($libjar)) {
+			$renderer->doc .= '<p>NetLogo: NetLogoLite.jar version not found: ' . $data['version'] . '</p>';
+			return true;
+		}
+		
 
 		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
 		$src = relativePath(DOKU_INC.'data/media/',$src);
