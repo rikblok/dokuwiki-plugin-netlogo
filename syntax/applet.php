@@ -138,7 +138,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 
 		// parse file to get contents
-		$nlogo = file_get_contents($src);
+		$nlogo = file_get_contents(mediaFN($src));
 		$nlogoparts = explode('@#$#@#$#@\n', $nlogo);
 		/*
 		[0] => code
@@ -218,14 +218,15 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$renderer->doc .= '<p>NetLogo: File not found: ' . $src . '</p>';
 			return true;
 		}
-		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
-		$src = relativePath(DOKU_INC.'data/media/',$src);
 
 		// debugging
 		$nlogo = file_get_contents($src);
 		$nlogoparts = explode('@#$#@#$#@\n', $nlogo);
 		$renderer->doc .= '<pre>Debugging:\n'.print_r($nlogoparts, true).'\n</pre>';
 
+		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
+		$src = relativePath(DOKU_INC.'data/media/',$src);
+		
 		// Will pass token to servefile.php to authorize.  First generate secret uuid if not found.
 		$uuidfile = 'data/tmp/plugin_netlogo_uuid';
 		if (!file_exists($uuidfile)) {
