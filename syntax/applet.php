@@ -10,7 +10,6 @@
  *	* maybe make .nlogo file parsing a method? [Rik, 2012-09-28]
  *	* read size from .nlogo file if not passed as parameter [Rik, 2012-10-12]
  *	* read version from .nlogo file if not passed as parameter [Rik, 2012-10-12]
- *	* download NetLogo jars if version not present [Rik, 2012-10-12]
  *
  * Documentation:
  * NetLogo model file format <https://github.com/NetLogo/NetLogo/wiki/Model-file-format>
@@ -138,21 +137,40 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$h = NULL;
 		}
 
+		// parse file to get contents
+		$nlogo = file_get_contents($src);
+		$nlogoparts = explode('@#$#@#$#@\n', $nlogo);
+		/*
+		[0] => code
+		[1] => interface
+		[2] => info
+		[3] => turtle shapes
+		[4] => NetLogo version
+		[5] => preview commands
+		[6] => system dynamics modeler
+		[7] => BehaviorSpace
+		[8] => HubNet client
+		[9] => link shapes
+		[10] =>model settings
+		[11] =>reserved by Michelle
+		[12] => (empty)
+		*/
+				
 		// default width and height (from Untitled.nlogo). Todo: extract from .nlogo file.
 		if (is_null($w)) $w = '644';
 		if (is_null($h)) $h = '470';
 		
 		// parse version number.  See all versions: http://ccl.northwestern.edu/netlogo/oldversions.shtml
 		if (preg_match('#version=(\d+\.\d+(\.?[\w]*)?)#',$param,$version)){
+			// specified by user
 			$ver = $version[1];
 		} else {
-			$ver = NULL;
+			// otherwise, grab from .nlogo file
+			preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
+			$ver = $version[1];
 		}
 		
-		// default version
-		if (is_null($ver)) $ver = '5.0.1';
-		
-		// download libraries?
+		// download libraries? Todo: move root url to config option
 		$libjar='lib/plugins/netlogo/libraries/'.$ver.'/NetLogoLite.jar';
 		$libjargz='lib/plugins/netlogo/libraries/'.$ver.'/NetLogoLite.jar.pack.gz';
 		$copyright='lib/plugins/netlogo/libraries/'.$ver.'/copyright.html';
