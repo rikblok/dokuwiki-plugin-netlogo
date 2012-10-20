@@ -214,6 +214,12 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 				return true;
 			}
 			
+			// show info
+			if ($data['do']==='info') {
+				$renderer->doc .= '<code>' . $nlogoparts[2] . '</code>';
+				return true;
+			}
+			
 			// version?
 			if (is_null($data['version'])) {
 				preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
