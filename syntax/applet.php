@@ -148,7 +148,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		// parse 'do' action
 		if (preg_match('#do=([a-z]+)#',$param,$action)){
 			// specified by user
-			$do = $action[0];
+			$do = $action[1];
 		} else {
 			$do = "interface";	// default
 		}
