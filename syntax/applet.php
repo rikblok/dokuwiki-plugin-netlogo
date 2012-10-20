@@ -145,6 +145,14 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$ver = NULL;
 		}
 		
+		// parse 'do' action
+		if (preg_match('#do=([a-z]+)#',$param,$action)){
+			// specified by user
+			$do = $action[0];
+		} else {
+			$do = "interface";	// default
+		}
+		
 		$params = array(
 			'src'=>$src,
 			'title'=>$link[1],
@@ -152,6 +160,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			'width'=>$w,
 			'height'=>$h,
 			'version'=>$ver,
+			'do'=>$do,
 		);
 
 		return $params;
@@ -176,7 +185,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 
 		// parse file to get contents
-		if (is_null($data['version']) || is_null($data['width']) || is_null($data['height'])) {
+		if (is_null($data['version']) || is_null($data['width']) || is_null($data['height']) || $data['do']=='code' || $data['do']=='info') {
 			$nlogo = file_get_contents($src);
 			$nlogoparts = explode('@#$#@#$#@', $nlogo);
 			/*
@@ -195,6 +204,12 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 				[12] => (empty)
 			*/
 
+			// show code
+			if ($data['do']=='code') {
+				$renderer->doc .= '<code>' . $nlogoparts[0] . '</code>';
+				return true;
+			}
+			
 			// version?
 			if (is_null($data['version'])) {
 				preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
