@@ -6,7 +6,11 @@
  * @author  Rik Blok <rik.blok@ubc.ca>
  *
  * ToDo:
- *	* allow "do" actions to present different views of file, eg. "&do=interface|info|code|download" (default=interface) [Rik, 2012-10-19]
+ *	* improve "do=info|code".  Use p_render()? [Rik, 2012-10-19]
+ *	* automatically add "nlogo    !application/octet-stream" to conf/mime.local.conf? [Rik, 2012-10-19]
+ *	* language support [Rik, 2012-10-19]
+ *	* better error messages [Rik, 2012-10-19]
+ *	* config options (eg. download url) [Rik, 2012-10-19]
  *
  * Documentation:
  * NetLogo model file format <https://github.com/NetLogo/NetLogo/wiki/Model-file-format>
@@ -153,7 +157,12 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		} else {
 			$do = "interface";	// default
 		}
-		
+
+		// check for nlogo fileicon
+		$nlogoiconsrc = DOKU_PLUGIN.'netlogo/fileicons/nlogo.png';
+		$nlogoicondest = DOKU_INC.'lib/images/fileicons/nlogo.png';
+		if (!file_exists($nlogoicondest))	copy($nlogoiconsrc, $nlogoicondest);
+
 		$params = array(
 			'src'=>$src,
 			'title'=>$link[1],
@@ -210,13 +219,13 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 			// show code
 			if ($data['do']==='code') {
-				$renderer->doc .= '<code>' . $nlogoparts[0] . '</code>';
+				$renderer->doc .= '<pre>' . $nlogoparts[0] . '</pre>';
 				return true;
 			}
 			
 			// show info
 			if ($data['do']==='info') {
-				$renderer->doc .= '<code>' . $nlogoparts[2] . '</code>';
+				$renderer->doc .= '<pre>' . $nlogoparts[2] . '</pre>';
 				return true;
 			}
 			
@@ -254,7 +263,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$renderer->doc .= '<p>NetLogo: NetLogoLite.jar version not found: ' . $data['version'] . '</p>';
 			return true;
 		}
-		
 
 		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
 		$src = relativePath(DOKU_INC.'data/media/',$src);
@@ -283,8 +291,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
         $renderer->info['cache'] = false;
 
 		// generate token for servefile.php to authorize, use $uuid as salt.  servefile.php must be able to generate same token or it won't serve file.
-		// $token=crypt($src.$expires,$uuid); // debugging [Rik, 2012-10-06] - only uses first 8 chars of $src
-		$token=hash('sha256',$uuid.$src.$expires); // debugging [Rik, 2012-10-06] - replace crypt() for more than first 8 chars
+		$token=hash('sha256',$uuid.$src.$expires); // replace crypt() for more than first 8 chars [Rik, 2012-10-06]
 
 		// special handling for center
 		$pcenter = false;
@@ -301,11 +308,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
-//								. '      value="data/media/playground/test.nlogo">' // debugging [Rik, 2012-09-28] - 403 Forbidden, applet gives runtime error
-//								. '      value="lib/plugins/netlogo/inc/servefile.php">' // debugging [Rik, 2012-09-28] - works!
-//								. '      value="lib/exe/fetch.php?media=playground:test.nlogo">' // debugging [Rik, 2012-10-03] - 403 Forbidden, applet gives runtime error
-//								. '      value="'.$tmpfname.'">' // debugging [Rik, 2012-10-05] - temp file exists but not read not permitted for either sys_get_temp_dir or 'data/tmp'
-								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">' // debugging [Rik, 2012-10-05] - works!
+								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">'
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
