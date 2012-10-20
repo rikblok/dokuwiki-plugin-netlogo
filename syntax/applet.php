@@ -207,7 +207,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 				$data['version'] = $version[1];
 			}
 			// debugging
-			$renderer->doc .= '<pre>'.$nlogoparts[1] .'</pre>';
+			//$nlogolines = explode('\n', $nlogoparts[1]);
+			preg_match_all('/[A-Z\-]+\n[0-9]+\n[0-9]+\n([0-9]+)\n([0-9]+)\n/',$nlogoparts[1],$rightbottom);
+			$renderer->doc .= '<pre>'. print_r($rightbottom,true) .'</pre>';
 		}
 		
 		// download libraries? Todo: move root url to config option
