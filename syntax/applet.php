@@ -207,6 +207,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 				preg_match_all('/(^|\n)\n[A-Z\-]+\n[0-9]+\n[0-9]+\n([0-9]+)\n([0-9]+)\n/',$nlogoparts[1],$rightbottom);
 				if (is_null($data['width']))	$data['width'] = max($rightbottom[2]);
 				if (is_null($data['height']))	$data['height'] = max($rightbottom[3]);
+			}
 		}
 		
 		// download libraries? Todo: move root url to config option
