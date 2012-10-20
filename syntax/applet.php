@@ -51,7 +51,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
     public function connectTo($mode) {
         // $this->Lexer->addSpecialPattern('\{\{netlogo>[^\}]+\}\}',$mode,'plugin_netlogo_applet');
 		// should look for {{*.nlogo}} instead of {{netlogo>*}} but none of the addSpecialPattern's below work.  Why?  http://www.pagecolumn.com/tool/pregtest.htm and other regex testers don't show any problems. [Rik, 2012-10-12]
-		$this->Lexer->addSpecialPattern('\{\{[^\{\}]+\.nlogo([?])? ?\}\}',$mode,'plugin_netlogo_applet');
+		$this->Lexer->addSpecialPattern('\{\{[^\{\}]+\.nlogo ?\}\}',$mode,'plugin_netlogo_applet');						// without parameters
+		$this->Lexer->addSpecialPattern('\{\{[^\{\}]+\.nlogo\?[^\{\} ]+ ?\}\}',$mode,'plugin_netlogo_applet');	// with parameters
 		// here are some test cases [Rik, 2012-10-12]
 		/*
 			// should work
