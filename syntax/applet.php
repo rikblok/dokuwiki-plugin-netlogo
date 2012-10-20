@@ -6,10 +6,8 @@
  * @author  Rik Blok <rik.blok@ubc.ca>
  *
  * ToDo:
- *	* if 'conf/local.php' touched since uuidfile created then recreate.  See http://www.jandecaluwe.com/testwiki/doku.php/navigation:sidebar_details#generating_the_sidebar_xhtml for demo. [Rik, 2012-10-05]
- *	* maybe make .nlogo file parsing a method? [Rik, 2012-09-28]
  *	* read size from .nlogo file if not passed as parameter [Rik, 2012-10-12]
- *	* read version from .nlogo file if not passed as parameter [Rik, 2012-10-12]
+ *	* look for {{*.nlogo}} instead of {{netlogo>*}} [Rik, 2012-10-12]
  *
  * Documentation:
  * NetLogo model file format <https://github.com/NetLogo/NetLogo/wiki/Model-file-format>
@@ -55,21 +53,25 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		// should look for {{*.nlogo}} instead of {{netlogo>*}} but none of the addSpecialPattern's below work.  Why?  http://www.pagecolumn.com/tool/pregtest.htm and other regex testers don't show any problems. [Rik, 2012-10-12]
 		// here are some test cases [Rik, 2012-10-12]
 		/*
+			// should work
 			{{ugh.nlogo}}
 			{{ugh.nlogo }}
 			{{ ugh.nlogo }}
 			{{ ugh.nlogo}}
 
+			// should work
 			{{ugh.nlogo?818x611&version=5.0.1}}
 			{{ugh.nlogo?818x611&version=5.0.1 }}
 			{{ ugh.nlogo?818x611&version=5.0.1 }}
 			{{ ugh.nlogo?818x611&version=5.0.1}}
 
+			// should fail
 			{{ugh.nlogo.x}}
 			{{ugh.nlogo.x }}
 			{{ ugh.nlogo.x }}
 			{{ ugh.nlogo.x}}
 
+			// should fail
 			{{ugh.nlogo.x?818x611&version=5.0.1}}
 			{{ugh.nlogo.x?818x611&version=5.0.1 }}
 			{{ ugh.nlogo.x?818x611&version=5.0.1 }}
@@ -204,6 +206,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 				preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
 				$data['version'] = $version[1];
 			}
+			// debugging
+			$renderer->doc .= '<pre>'.$nlogoparts[1] .'</pre>';
 		}
 		
 		// download libraries? Todo: move root url to config option
