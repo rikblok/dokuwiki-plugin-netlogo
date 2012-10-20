@@ -6,7 +6,6 @@
  * @author  Rik Blok <rik.blok@ubc.ca>
  *
  * ToDo:
- *	* read size from .nlogo file if not passed as parameter [Rik, 2012-10-12]
  *	* look for {{*.nlogo}} instead of {{netlogo>*}} [Rik, 2012-10-12]
  *
  * Documentation:
@@ -130,7 +129,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$param = '';
 		}
 
-		//parse width and height (must be first parameter)
+		// parse width and height (must be first parameter)
 		if (preg_match('#^(\d+)(x(\d+))?#i',$param,$size)){
 			($size[1]) ? $w = $size[1] : $w = NULL;
 			($size[3]) ? $h = $size[3] : $h = NULL;
@@ -139,10 +138,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$h = NULL;
 		}
 
-		// default width and height (from Untitled.nlogo). Todo: extract from .nlogo file.
-		if (is_null($w)) $w = '644';
-		if (is_null($h)) $h = '470';
-		
 		// parse version number.  See all versions: http://ccl.northwestern.edu/netlogo/oldversions.shtml
 		if (preg_match('#version=(\d+\.\d+(\.?[\w]*)?)#',$param,$version)){
 			// specified by user
@@ -206,10 +201,12 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 				preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
 				$data['version'] = $version[1];
 			}
-			// debugging
-			//$nlogolines = explode('\n', $nlogoparts[1]);
-			preg_match_all('/(^|\n)\n[A-Z\-]+\n[0-9]+\n[0-9]+\n([0-9]+)\n([0-9]+)\n/',$nlogoparts[1],$rightbottom);
-			$renderer->doc .= '<pre>' . print_r($rightbottom[2],true) . print_r($rightbottom[3],true) . '</pre>';
+			// width & height?
+			if (is_null($data['width']) || is_null($data['height'])) {
+				// store x,y coordinates of bottom right corner in $rightbottom[2] & $rightbottom[3], respectively
+				preg_match_all('/(^|\n)\n[A-Z\-]+\n[0-9]+\n[0-9]+\n([0-9]+)\n([0-9]+)\n/',$nlogoparts[1],$rightbottom);
+				if (is_null($data['width']))	$data['width'] = max($rightbottom[2]);
+				if (is_null($data['height']))	$data['height'] = max($rightbottom[3]);
 		}
 		
 		// download libraries? Todo: move root url to config option
