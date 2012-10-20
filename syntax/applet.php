@@ -194,9 +194,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			return true;
 		}
 
-		// debugging [Rik, 2012-10-19]
-		$renderer->doc .= '<pre>do='.$data['do'].'</pre>';
-		
 		// parse file to get contents
 		if (is_null($data['version']) || is_null($data['width']) || is_null($data['height']) || $data['do']==='code' || $data['do']==='info') {
 			$nlogo = file_get_contents($src);
