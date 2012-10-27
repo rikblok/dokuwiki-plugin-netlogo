@@ -891,7 +891,7 @@ class Markdown_Parser {
 			}
 			$result .= $this->empty_element_suffix;
 			*/
-//			$result = "{{$url | $alt_text}}";
+			$result = "\{\{$url | $alt_text\}\}";
 			$result = $this->hashPart($result);
 		}
 		else {
@@ -918,7 +918,7 @@ class Markdown_Parser {
 		}
 		$result .= $this->empty_element_suffix;
 		*/
-//		$result = "{{$url | $alt_text}}";
+		$result = "\{\{$url | $alt_text\}\}";
 		return $this->hashPart($result);
 	}
 
