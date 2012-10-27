@@ -795,6 +795,8 @@ class Markdown_Parser {
 
 		$url = $this->encodeAttribute($url);
 
+		// replaced with [[url|text]] [Rik, 2012-10-25]
+		/*
 		$result = "<a href=\"$url\"";
 		if (isset($title)) {
 			$title = $this->encodeAttribute($title);
@@ -803,6 +805,10 @@ class Markdown_Parser {
 		
 		$link_text = $this->runSpanGamut($link_text);
 		$result .= ">$link_text</a>";
+		*/
+		$result = "[[$url";
+		$link_text = $this->runSpanGamut($link_text);
+		$result .= "|$link_text]]";
 
 		return $this->hashPart($result);
 	}
