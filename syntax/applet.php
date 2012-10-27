@@ -94,7 +94,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		 * http://xref.dokuwiki.org/reference/dokuwiki/_functions/doku_handler_parse_media.html
 		*/
 		// Strip the opening and closing markup
-		//$link = preg_replace(array('/^\{\{netlogo>/','/\}\}$/u'),'',$match);	// debugging [Rik, 2012-10-19]
 		$link = preg_replace(array('/^\{\{/','/\}\}$/u'),'',$match);	
 		
 		// Split title from URL
@@ -185,12 +184,12 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$src = $data['src'];
 		resolve_mediaid(getNS($ID),$src,$exists);
 		if(auth_quickaclcheck(getNS($src).':X') < AUTH_READ){ // auth_quickaclcheck() mimicked from http://xref.dokuwiki.org/reference/dokuwiki/_functions/checkfilestatus.html
-			$renderer->doc .= '<p>NetLogo: File not allowed: ' . $src . '</p>';
+			$renderer->doc .= '<div class="error">NetLogo: File not allowed: ' . $src . '</div>';
 			return true;
 		}
 		$src = mediaFN($src);
 		if (!$exists) {
-			$renderer->doc .= '<p>NetLogo: File not found: ' . $src . '</p>';
+			$renderer->doc .= '<div class="error">NetLogo: File not found: ' . $src . '</div>';
 			return true;
 		}
 
@@ -216,7 +215,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 			// show code
 			if ($data['do']==='code') {
-				$renderer->doc .= '<pre>' . $nlogoparts[0] . '</pre>';
+				$renderer->doc .= p_render('xhtml',p_get_instructions('<code netlogo>' . $nlogoparts[0] . '</code>'),$info);
 				return true;
 			}
 			
@@ -257,7 +256,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 		// check if jar files exist
 		if (!file_exists($libjar)) {
-			$renderer->doc .= '<p>NetLogo: NetLogoLite.jar version not found: ' . $data['version'] . '</p>';
+			$renderer->doc .= '<div class="error">NetLogo: NetLogoLite.jar version not found: ' . $data['version'] . '</div>';
 			return true;
 		}
 
@@ -268,12 +267,12 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$uuidfile = 'data/tmp/plugin_netlogo_uuid';
 		if (!file_exists($uuidfile)) {
 			if (!$handle = fopen($uuidfile, 'w')) {
-				$renderer->doc .= '<p>NetLogo: Cannot create UUID ' . $uuidfile . '</p>';
+				$renderer->doc .= '<div class="error">NetLogo: Cannot create UUID ' . $uuidfile . '</div>';
 				return true;
 			}
 			// Write uuid to our opened file.
 			if (fwrite($handle, uuid4()) === FALSE) {
-				$renderer->doc .= '<p>NetLogo: Cannot write UUID to ' . $uuidfile . '</p>';
+				$renderer->doc .= '<div class="error">NetLogo: Cannot write UUID to ' . $uuidfile . '</div>';
 				return true;
 			}
 			fclose($handle);		
