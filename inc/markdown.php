@@ -881,6 +881,8 @@ class Markdown_Parser {
 		$alt_text = $this->encodeAttribute($alt_text);
 		if (isset($this->urls[$link_id])) {
 			$url = $this->encodeAttribute($this->urls[$link_id]);
+			// replaced with "{{url|alt}}" [Rik, 2012-10-25]
+			/*
 			$result = "<img src=\"$url\" alt=\"$alt_text\"";
 			if (isset($this->titles[$link_id])) {
 				$title = $this->titles[$link_id];
@@ -888,6 +890,8 @@ class Markdown_Parser {
 				$result .=  " title=\"$title\"";
 			}
 			$result .= $this->empty_element_suffix;
+			*/
+			$result = "{{$url | $alt_text}}";
 			$result = $this->hashPart($result);
 		}
 		else {
@@ -905,12 +909,16 @@ class Markdown_Parser {
 
 		$alt_text = $this->encodeAttribute($alt_text);
 		$url = $this->encodeAttribute($url);
+		// replaced with "{{url|alt}}" [Rik, 2012-10-25]
+		/*
 		$result = "<img src=\"$url\" alt=\"$alt_text\"";
 		if (isset($title)) {
 			$title = $this->encodeAttribute($title);
 			$result .=  " title=\"$title\""; # $title already quoted
 		}
 		$result .= $this->empty_element_suffix;
+		*/
+		$result = "{{$url |$alt_text}}";
 
 		return $this->hashPart($result);
 	}
@@ -952,12 +960,16 @@ class Markdown_Parser {
 			return $matches[0];
 		
 		$level = $matches[2]{0} == '=' ? 1 : 2;
-		$block = "<h$level>".$this->runSpanGamut($matches[1])."</h$level>";
+		// replaced with === header === [Rik, 2012-10-25]
+		//$block = "<h$level>".$this->runSpanGamut($matches[1])."</h$level>";
+		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 	function _doHeaders_callback_atx($matches) {
 		$level = strlen($matches[1]);
-		$block = "<h$level>".$this->runSpanGamut($matches[2])."</h$level>";
+		// replaced with === header === [Rik, 2012-10-25]
+		//$block = "<h$level>".$this->runSpanGamut($matches[2])."</h$level>";
+		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 
