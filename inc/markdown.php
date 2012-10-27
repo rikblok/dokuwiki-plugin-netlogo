@@ -1,7 +1,8 @@
 <?php
 #
 # Markdown to DokuWiki converter
-# modified from
+# converts Markdown to DokuWiki code.
+# Modified from
 # Markdown Extra  -  A text-to-HTML conversion tool for web writers
 #
 # PHP Markdown & Extra
@@ -620,7 +621,9 @@ class Markdown_Parser {
 				[ ]*		# Tailing spaces
 				$			# End of line.
 			}mx',
-			"\n".$this->hashBlock("<hr$this->empty_element_suffix")."\n", 
+			// replaced w/ 4 dashes [Rik, 2012-10-25]
+			//"\n".$this->hashBlock("<hr$this->empty_element_suffix")."\n",
+			"\n".$this->hashBlock("----")."\n", 
 			$text);
 	}
 
@@ -667,7 +670,9 @@ class Markdown_Parser {
 			array(&$this, '_doHardBreaks_callback'), $text);
 	}
 	function _doHardBreaks_callback($matches) {
-		return $this->hashPart("<br$this->empty_element_suffix\n");
+		// replaced with "\\" [Rik, 2012-10-25]
+		//return $this->hashPart("<br$this->empty_element_suffix\n");
+		return $this->hashPart("\\\\\n");
 	}
 
 
@@ -758,7 +763,9 @@ class Markdown_Parser {
 		if (isset($this->urls[$link_id])) {
 			$url = $this->urls[$link_id];
 			$url = $this->encodeAttribute($url);
-			
+
+			// replaced with [[url|text]] [Rik, 2012-10-25]
+			/*
 			$result = "<a href=\"$url\"";
 			if ( isset( $this->titles[$link_id] ) ) {
 				$title = $this->titles[$link_id];
@@ -769,6 +776,11 @@ class Markdown_Parser {
 			$link_text = $this->runSpanGamut($link_text);
 			$result .= ">$link_text</a>";
 			$result = $this->hashPart($result);
+			*/
+			$result = "[[$url";
+			$link_text = $this->runSpanGamut($link_text);
+			$result .= "|$link_text]]";
+			$result = $this->hashPart($result);			
 		}
 		else {
 			$result = $whole_match;
