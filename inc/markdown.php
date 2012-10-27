@@ -572,9 +572,9 @@ class Markdown_Parser {
 		"doHeaders"         => 10,
 		"doHorizontalRules" => 20,
 		
-		"doLists"           => 40,
+//		"doLists"           => 40,				// removed [Rik, 2012-10-25]
 		"doCodeBlocks"      => 50,
-		"doBlockQuotes"     => 60,
+//		"doBlockQuotes"     => 60,			// removed [Rik, 2012-10-25]
 		);
 
 	function runBlockGamut($text) {
@@ -645,11 +645,11 @@ class Markdown_Parser {
 		# Make links out of things like `<http://example.com/>`
 		# Must come after doAnchors, because you can use < and >
 		# delimiters in inline links like [this](<url>).
-		"doAutoLinks"         =>  30,
-		"encodeAmpsAndAngles" =>  40,
+//		"doAutoLinks"         =>  30,			// removed [Rik, 2012-10-25]
+//		"encodeAmpsAndAngles" =>  40,	// removed [Rik, 2012-10-25]
 
 		"doItalicsAndBold"    =>  50,
-		"doHardBreaks"        =>  60,
+//		"doHardBreaks"        =>  60,			// removed [Rik, 2012-10-25]
 		);
 
 	function runSpanGamut($text) {
@@ -1053,7 +1053,8 @@ class Markdown_Parser {
 		$list .= "\n";
 		$result = $this->processListItems($list, $marker_any_re);
 		
-		$result = $this->hashBlock("<$list_type>\n" . $result . "</$list_type>");
+		// remove [Rik, 2012-10-25]
+		//$result = $this->hashBlock("<$list_type>\n" . $result . "</$list_type>");
 		return "\n". $result ."\n\n";
 	}
 
@@ -1126,7 +1127,9 @@ class Markdown_Parser {
 			$item = $this->runSpanGamut($item);
 		}
 
-		return "<li>" . $item . "</li>\n";
+		// replaced with "  * item" [Rik, 2012-10-25]
+		//return "<li>" . $item . "</li>\n";
+		return "  * " . $item . "\n";
 	}
 
 
@@ -1157,7 +1160,9 @@ class Markdown_Parser {
 		# trim leading newlines and trailing newlines
 		$codeblock = preg_replace('/\A\n+|\n+\z/', '', $codeblock);
 
-		$codeblock = "<pre><code>$codeblock\n</code></pre>";
+		// replaced with <code>block</code> [Rik, 2012-10-25]
+		//$codeblock = "<pre><code>$codeblock\n</code></pre>";
+		$codeblock = "<code>$codeblock\n</code>";
 		return "\n\n".$this->hashBlock($codeblock)."\n\n";
 	}
 
@@ -1386,8 +1391,9 @@ class Markdown_Parser {
 			if (!preg_match('/^B\x1A[0-9]+B$/', $value)) {
 				# Is a paragraph.
 				$value = $this->runSpanGamut($value);
-				$value = preg_replace('/^([ ]*)/', "<p>", $value);
-				$value .= "</p>";
+				// removed [Rik, 2012-10-25]
+				//$value = preg_replace('/^([ ]*)/', "<p>", $value);
+				//$value .= "</p>";
 				$grafs[$key] = $this->unhash($value);
 			}
 			else {
@@ -1445,7 +1451,8 @@ class Markdown_Parser {
 	# is *not* suitable for attributes enclosed in single quotes.
 	#
 		$text = $this->encodeAmpsAndAngles($text);
-		$text = str_replace('"', '&quot;', $text);
+		// removed [Rik, 2012-10-25]
+		//$text = str_replace('"', '&quot;', $text);
 		return $text;
 	}
 	
@@ -1457,21 +1464,25 @@ class Markdown_Parser {
 	# no-entities mode is set.
 	#
 		if ($this->no_entities) {
-			$text = str_replace('&', '&amp;', $text);
+			// removed [Rik, 2012-10-25]
+			//$text = str_replace('&', '&amp;', $text);
 		} else {
 			# Ampersand-encoding based entirely on Nat Irons's Amputator
 			# MT plugin: <http://bumppo.net/projects/amputator/>
-			$text = preg_replace('/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/', 
-								'&amp;', $text);;
+			// removed [Rik, 2012-10-25]
+			//$text = preg_replace('/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/', 
+			//					'&amp;', $text);;
 		}
 		# Encode remaining <'s
-		$text = str_replace('<', '&lt;', $text);
+		// removed [Rik, 2012-10-25]
+		//$text = str_replace('<', '&lt;', $text);
 
 		return $text;
 	}
 
 
 	function doAutoLinks($text) {
+		// 
 		$text = preg_replace_callback('{<((https?|ftp|dict):[^\'">\s]+)>}i', 
 			array(&$this, '_doAutoLinks_url_callback'), $text);
 
