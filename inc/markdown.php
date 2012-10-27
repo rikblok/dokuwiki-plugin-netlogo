@@ -918,8 +918,7 @@ class Markdown_Parser {
 		}
 		$result .= $this->empty_element_suffix;
 		*/
-		$result = "{{$url |$alt_text}}";
-
+		$result = "{{$url | $alt_text}}";
 		return $this->hashPart($result);
 	}
 
@@ -962,14 +961,14 @@ class Markdown_Parser {
 		$level = $matches[2]{0} == '=' ? 1 : 2;
 		// replaced with === header === [Rik, 2012-10-25]
 		//$block = "<h$level>".$this->runSpanGamut($matches[1])."</h$level>";
-		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
+//		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 	function _doHeaders_callback_atx($matches) {
 		$level = strlen($matches[1]);
 		// replaced with === header === [Rik, 2012-10-25]
 		//$block = "<h$level>".$this->runSpanGamut($matches[2])."</h$level>";
-		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
+//		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 
