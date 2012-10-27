@@ -144,8 +144,9 @@ if (isset($wp_version)) {
 	
 	function mdwp_add_p($text) {
 		if (!preg_match('{^$|^<(p|ul|ol|dl|pre|blockquote)>}i', $text)) {
-			$text = '<p>'.$text.'</p>';
-			$text = preg_replace('{\n{2,}}', "</p>\n\n<p>", $text);
+			// removed [Rik, 2012-10-25]
+			//$text = '<p>'.$text.'</p>';
+			//$text = preg_replace('{\n{2,}}', "</p>\n\n<p>", $text);
 		}
 		return $text;
 	}
@@ -635,7 +636,7 @@ class Markdown_Parser {
 	#
 		# Process character escapes, code spans, and inline HTML
 		# in one shot.
-		"parseSpan"           => -30,
+//		"parseSpan"           => -30,			// removed [Rik, 2012-10-25]
 
 		# Process anchor and image tags. Images must come first,
 		# because ![foo][f] looks like an anchor.
@@ -2671,7 +2672,8 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			$is_p = !preg_match('/^B\x1A[0-9]+B|^C\x1A[0-9]+C$/', $value);
 			
 			if ($is_p) {
-				$value = "<p>$value</p>";
+				// removed [Rik, 2012-10-25]
+				//$value = "<p>$value</p>";
 			}
 			$grafs[$key] = $value;
 		}
