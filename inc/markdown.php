@@ -968,7 +968,7 @@ class Markdown_Parser {
 		$level = strlen($matches[1]);
 		// replaced with === header === [Rik, 2012-10-25]
 		//$block = "<h$level>".$this->runSpanGamut($matches[2])."</h$level>";
-		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
+		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[2]).str_repeat("=", 7-$level);
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 
@@ -2311,13 +2311,17 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			return $matches[0];
 		$level = $matches[3]{0} == '=' ? 1 : 2;
 		$attr  = $this->_doHeaders_attr($id =& $matches[2]);
-		$block = "<h$level$attr>".$this->runSpanGamut($matches[1])."</h$level>";
+		// replaced with === header === [Rik, 2012-10-25]
+		//$block = "<h$level$attr>".$this->runSpanGamut($matches[1])."</h$level>";
+		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 	function _doHeaders_callback_atx($matches) {
 		$level = strlen($matches[1]);
 		$attr  = $this->_doHeaders_attr($id =& $matches[3]);
-		$block = "<h$level$attr>".$this->runSpanGamut($matches[2])."</h$level>";
+		// replaced with === header === [Rik, 2012-10-25]
+		//$block = "<h$level$attr>".$this->runSpanGamut($matches[2])."</h$level>";
+		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[2]).str_repeat("=", 7-$level);
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 
