@@ -29,6 +29,7 @@ if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 
 require_once DOKU_PLUGIN.'syntax.php';
 require_once DOKU_PLUGIN.'netlogo/inc/support.php';
+require_once DOKU_PLUGIN.'netlogo/inc/markdown.php';
 
 class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
     public function getType() {
@@ -221,7 +222,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			
 			// show info
 			if ($data['do']==='info') {
-				$renderer->doc .= p_render('xhtml',p_get_instructions($nlogoparts[2]),$info);
+				$renderer->doc .= Markdown($nlogoparts[2]);
+				//$renderer->doc .= p_render('xhtml',p_get_instructions($nlogoparts[2]),$info);
 				//$renderer->doc .= '<pre>' . $nlogoparts[2] . '</pre>';
 				return true;
 			}
