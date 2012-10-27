@@ -221,7 +221,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			
 			// show info
 			if ($data['do']==='info') {
-				$renderer->doc .= p_render('xhtml',p_get_instructions('<code netlogo>' . $nlogoparts[2] . '</code>'),$info);
+				$renderer->doc .= p_render('xhtml',p_get_instructions($nlogoparts[2]),$info);
 				//$renderer->doc .= '<pre>' . $nlogoparts[2] . '</pre>';
 				return true;
 			}
