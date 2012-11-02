@@ -1257,7 +1257,9 @@ class Markdown_Parser {
 					array_shift($token_stack);
 					$span = array_shift($text_stack);
 					$span = $this->runSpanGamut($span);
-					$span = "<strong><em>$span</em></strong>";
+					// replaced [Rik, 2012-11-02]
+					//$span = "<strong><em>$span</em></strong>";
+					$span = "**//$span//**";
 					$text_stack[0] .= $this->hashPart($span);
 					$em = '';
 					$strong = '';
@@ -1265,10 +1267,14 @@ class Markdown_Parser {
 					# Other closing marker: close one em or strong and
 					# change current token state to match the other
 					$token_stack[0] = str_repeat($token{0}, 3-$token_len);
-					$tag = $token_len == 2 ? "strong" : "em";
+					// replaced [Rik, 2012-11-02]
+					//$tag = $token_len == 2 ? "strong" : "em";
+					$tag = $token_len == 2 ? "**" : "//";
 					$span = $text_stack[0];
 					$span = $this->runSpanGamut($span);
-					$span = "<$tag>$span</$tag>";
+					// replaced [Rik, 2012-11-02]
+					//$span = "<$tag>$span</$tag>";
+					$span = "$tag$span$tag";
 					$text_stack[0] = $this->hashPart($span);
 					$$tag = ''; # $$tag stands for $em or $strong
 				}
@@ -1279,10 +1285,14 @@ class Markdown_Parser {
 					# Closing strong marker:
 					for ($i = 0; $i < 2; ++$i) {
 						$shifted_token = array_shift($token_stack);
-						$tag = strlen($shifted_token) == 2 ? "strong" : "em";
+						// replaced [Rik, 2012-11-02]
+						//$tag = strlen($shifted_token) == 2 ? "strong" : "em";
+						$tag = strlen($shifted_token) == 2 ? "**" : "//";
 						$span = array_shift($text_stack);
 						$span = $this->runSpanGamut($span);
-						$span = "<$tag>$span</$tag>";
+						// replaced [Rik, 2012-11-02]
+						//$span = "<$tag>$span</$tag>";
+						$span = "$tag$span$tag";
 						$text_stack[0] .= $this->hashPart($span);
 						$$tag = ''; # $$tag stands for $em or $strong
 					}
@@ -1306,7 +1316,9 @@ class Markdown_Parser {
 					array_shift($token_stack);
 					$span = array_shift($text_stack);
 					$span = $this->runSpanGamut($span);
-					$span = "<strong>$span</strong>";
+					// replaced [Rik, 2012-11-02]
+					//$span = "<strong>$span</strong>";
+					$span = "**$span**";
 					$text_stack[0] .= $this->hashPart($span);
 					$strong = '';
 				} else {
@@ -1322,7 +1334,9 @@ class Markdown_Parser {
 						array_shift($token_stack);
 						$span = array_shift($text_stack);
 						$span = $this->runSpanGamut($span);
-						$span = "<em>$span</em>";
+						// replaced [Rik, 2012-11-02]
+						//$span = "<em>$span</em>";
+						$span = "//$span//";
 						$text_stack[0] .= $this->hashPart($span);
 						$em = '';
 					} else {
