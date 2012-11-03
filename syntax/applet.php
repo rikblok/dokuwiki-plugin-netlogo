@@ -29,7 +29,9 @@ if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 
 require_once DOKU_PLUGIN.'syntax.php';
 require_once DOKU_PLUGIN.'netlogo/inc/support.php';
-require_once DOKU_PLUGIN.'netlogo/inc/markdown.php';
+// testing new Markdown library.  Easier to mod? [Rik, 2012-11-02]
+//require_once DOKU_PLUGIN.'netlogo/inc/markdown.php';
+require_once DOKU_PLUGIN.'netlogo/inc/Markdown/Filter.php';
 
 class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
     public function getType() {
@@ -224,7 +226,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			if ($data['do']==='info') {
 				// debugging [Rik, 2012-11-02]
 				//$renderer->doc .= p_render('xhtml',p_get_instructions(Markdown($nlogoparts[2])),$info);
-				$renderer->doc .= '<pre>'.Markdown($nlogoparts[2]).'</pre>';
+				// testing new Markdown library.  Easier to mod? [Rik, 2012-11-02]
+				//$renderer->doc .= '<pre>'.Markdown($nlogoparts[2]).'</pre>';
+				$renderer->doc .= '<pre>'.Markdown_Filter::run($nlogoparts[2]).'</pre>';
 				//$renderer->doc .= p_render('xhtml',p_get_instructions($nlogoparts[2]),$info);
 				//$renderer->doc .= '<pre>' . $nlogoparts[2] . '</pre>';
 				return true;
