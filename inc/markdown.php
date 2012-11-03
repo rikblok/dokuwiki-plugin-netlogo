@@ -64,7 +64,7 @@ function Markdown($text) {
 	}
 
 	# Transform text using parser.
-	return 'debug Markdown: '. $parser->transform($text);
+	/* return 'debug Markdown: '.*/ return $parser->transform($text);
 }
 
 
@@ -116,7 +116,7 @@ if (isset($wp_version)) {
 		} else {
 			$parser->fn_id_prefix = get_the_ID() . ".";
 		}
-		return 'debug mdwp_MarkdownPost: '. $parser->transform($text);
+		/* return 'debug mdwp_MarkdownPost: '.*/ return $parser->transform($text);
 	}
 	
 	# Comments
@@ -148,18 +148,18 @@ if (isset($wp_version)) {
 			//$text = '<p>'.$text.'</p>';
 			//$text = preg_replace('{\n{2,}}', "</p>\n\n<p>", $text);
 		}
-		return 'debug mdwp_add_p: '. $text;
+		/* return 'debug mdwp_add_p: '.*/ return $text;
 	}
 	
-	function mdwp_strip_p($t) { return 'debug mdwp_strip_p: '. preg_replace('{</?p>}i', '', $t); }
+	function mdwp_strip_p($t) { /* return 'debug mdwp_strip_p: '.*/ return preg_replace('{</?p>}i', '', $t); }
 
 	function mdwp_hide_tags($text) {
 		global $mdwp_hidden_tags, $mdwp_placeholders;
-		return 'debug mdwp_hide_tags: '. str_replace($mdwp_hidden_tags, $mdwp_placeholders, $text);
+		/* return 'debug mdwp_hide_tags: '.*/ return str_replace($mdwp_hidden_tags, $mdwp_placeholders, $text);
 	}
 	function mdwp_show_tags($text) {
 		global $mdwp_hidden_tags, $mdwp_placeholders;
-		return 'debug mdwp_show_tags: '. str_replace($mdwp_placeholders, $mdwp_hidden_tags, $text);
+		/* return 'debug mdwp_show_tags: '.*/ return str_replace($mdwp_placeholders, $mdwp_hidden_tags, $text);
 	}
 }
 
@@ -183,7 +183,7 @@ function identify_modifier_markdown() {
 ### Smarty Modifier Interface ###
 
 function smarty_modifier_markdown($text) {
-	return 'debug smarty_modifier_markdown: '. Markdown($text);
+	/* return 'debug smarty_modifier_markdown: '.*/ return Markdown($text);
 }
 
 
@@ -199,14 +199,14 @@ if (strcasecmp(substr(__FILE__, -16), "classTextile.php") == 0) {
 		function TextileThis($text, $lite='', $encode='') {
 			if ($lite == '' && $encode == '')    $text = Markdown($text);
 			if (function_exists('SmartyPants'))  $text = SmartyPants($text);
-			return 'debug TextileThis: '. $text;
+			/* return 'debug TextileThis: '.*/ return $text;
 		}
 		# Fake restricted version: restrictions are not supported for now.
 		function TextileRestricted($text, $lite='', $noimage='') {
-			return 'debug TextileRestricted: '. $this->TextileThis($text, $lite);
+			/* return 'debug TextileRestricted: '.*/ return $this->TextileThis($text, $lite);
 		}
 		# Workaround to ensure compatibility with TextPattern 4.0.3.
-		function blockLite($text) { return 'debug blockLite: '. $text; }
+		function blockLite($text) { /* return 'debug blockLite: '.*/ return $text; }
 	}
 }
 
@@ -336,7 +336,7 @@ class Markdown_Parser {
 		
 		$this->teardown();
 
-		return 'debug transform: '. $text . "\n";
+		/* return 'debug transform: '.*/ return $text . "\n";
 	}
 	
 	var $document_gamut = array(
@@ -379,19 +379,19 @@ class Markdown_Parser {
 			}xm',
 			array(&$this, '_stripLinkDefinitions_callback'),
 			$text);
-		return 'debug stripLinkDefinitions: '. $text;
+		/* return 'debug stripLinkDefinitions: '.*/ return $text;
 	}
 	function _stripLinkDefinitions_callback($matches) {
 		$link_id = strtolower($matches[1]);
 		$url = $matches[2] == '' ? $matches[3] : $matches[2];
 		$this->urls[$link_id] = $url;
 		$this->titles[$link_id] =& $matches[4];
-		return 'debug _stripLinkDefinitions_callback: '. ''; # String that will replace the block
+		/* return 'debug _stripLinkDefinitions_callback: '.*/ return ''; # String that will replace the block
 	}
 
 
 	function hashHTMLBlocks($text) {
-		if ($this->no_markup)  return 'debug hashHTMLBlocks: '. $text;
+		if ($this->no_markup)  /* return 'debug hashHTMLBlocks: '.*/ return $text;
 
 		$less_than_tab = $this->tab_width - 1;
 
@@ -525,12 +525,12 @@ class Markdown_Parser {
 			array(&$this, '_hashHTMLBlocks_callback'),
 			$text);
 
-		return 'debug hashHTMLBlocks: '. $text;
+		/* return 'debug hashHTMLBlocks: '.*/ return $text;
 	}
 	function _hashHTMLBlocks_callback($matches) {
 		$text = $matches[1];
 		$key  = $this->hashBlock($text);
-		return 'debug _hashHTMLBlocks_callback: '. "\n\n$key\n\n";
+		/* return 'debug _hashHTMLBlocks_callback: '.*/ return "\n\n$key\n\n";
 	}
 	
 	
@@ -553,7 +553,7 @@ class Markdown_Parser {
 		static $i = 0;
 		$key = "$boundary\x1A" . ++$i . $boundary;
 		$this->html_hashes[$key] = $text;
-		return 'debug hashPart: '. $key; # String that will replace the tag.
+		/* return 'debug hashPart: '.*/ return $key; # String that will replace the tag.
 	}
 
 
@@ -561,7 +561,7 @@ class Markdown_Parser {
 	#
 	# Shortcut function for hashPart with block-level boundaries.
 	#
-		return 'debug hashBlock: '. $this->hashPart($text, 'B');
+		/* return 'debug hashBlock: '.*/ return $this->hashPart($text, 'B');
 	}
 
 
@@ -589,7 +589,7 @@ class Markdown_Parser {
 		# been seen as a code block in a previous pass of hashHTMLBlocks.
 		$text = $this->hashHTMLBlocks($text);
 		
-		return 'debug runBlockGamut: '. $this->runBasicBlockGamut($text);
+		/* return 'debug runBlockGamut: '.*/ return $this->runBasicBlockGamut($text);
 	}
 	
 	function runBasicBlockGamut($text) {
@@ -605,13 +605,13 @@ class Markdown_Parser {
 		# Finally form paragraph and restore hashed blocks.
 		$text = $this->formParagraphs($text);
 
-		return 'debug runBasicBlockGamut: '. $text;
+		/* return 'debug runBasicBlockGamut: '.*/ return $text;
 	}
 	
 	
 	function doHorizontalRules($text) {
 		# Do Horizontal Rules:
-		return 'debug doHorizontalRules: '. preg_replace(
+		/* return 'debug doHorizontalRules: '.*/ return preg_replace(
 			'{
 				^[ ]{0,3}	# Leading space
 				([-*_])		# $1: First marker
@@ -661,19 +661,19 @@ class Markdown_Parser {
 			$text = $this->$method($text);
 		}
 
-		return 'debug runSpanGamut: '. $text;
+		/* return 'debug runSpanGamut: '.*/ return $text;
 	}
 	
 	
 	function doHardBreaks($text) {
 		# Do hard breaks:
-		return 'debug doHardBreaks: '. preg_replace_callback('/ {2,}\n/', 
+		/* return 'debug doHardBreaks: '.*/ return preg_replace_callback('/ {2,}\n/', 
 			array(&$this, '_doHardBreaks_callback'), $text);
 	}
 	function _doHardBreaks_callback($matches) {
 		// replaced with "\\" [Rik, 2012-10-25]
 		//return $this->hashPart("<br$this->empty_element_suffix\n");
-		return 'debug _doHardBreaks_callback: '. $this->hashPart("\\\\\n");
+		/* return 'debug _doHardBreaks_callback: '.*/ return $this->hashPart("\\\\\n");
 	}
 
 
@@ -681,7 +681,7 @@ class Markdown_Parser {
 	#
 	# Turn Markdown link shortcuts into XHTML <a> tags.
 	#
-		if ($this->in_anchor) return 'debug doAnchors: '. $text;
+		if ($this->in_anchor) /* return 'debug doAnchors: '.*/ return $text;
 		$this->in_anchor = true;
 		
 		#
@@ -745,7 +745,7 @@ class Markdown_Parser {
 			array(&$this, '_doAnchors_reference_callback'), $text);
 
 		$this->in_anchor = false;
-		return 'debug doAnchors: '. $text;
+		/* return 'debug doAnchors: '.*/ return $text;
 	}
 	function _doAnchors_reference_callback($matches) {
 		$whole_match =  $matches[1];
@@ -786,7 +786,7 @@ class Markdown_Parser {
 		else {
 			$result = $whole_match;
 		}
-		return 'debug _doAnchors_reference_callback: '. $result;
+		/* return 'debug _doAnchors_reference_callback: '.*/ return $result;
 	}
 	function _doAnchors_inline_callback($matches) {
 		$whole_match	=  $matches[1];
@@ -811,7 +811,7 @@ class Markdown_Parser {
 		$link_text = $this->runSpanGamut($link_text);
 		$result .= "|$link_text]]";
 
-		return 'debug _doAnchors_inline_callback: '. $this->hashPart($result);
+		/* return 'debug _doAnchors_inline_callback: '.*/ return $this->hashPart($result);
 	}
 
 
@@ -868,7 +868,7 @@ class Markdown_Parser {
 			}xs',
 			array(&$this, '_doImages_inline_callback'), $text);
 
-		return 'debug doImages: '. $text;
+		/* return 'debug doImages: '.*/ return $text;
 	}
 	function _doImages_reference_callback($matches) {
 		$whole_match = $matches[1];
@@ -900,7 +900,7 @@ class Markdown_Parser {
 			$result = $whole_match;
 		}
 
-		return 'debug _doImages_reference_callback: '. $result;
+		/* return 'debug _doImages_reference_callback: '.*/ return $result;
 	}
 	function _doImages_inline_callback($matches) {
 		$whole_match	= $matches[1];
@@ -920,7 +920,7 @@ class Markdown_Parser {
 		$result .= $this->empty_element_suffix;
 		*/
 		$result = "\{\{$url | $alt_text\}\}";
-		return 'debug _doImages_inline_callback: '. $this->hashPart($result);
+		/* return 'debug _doImages_inline_callback: '.*/ return $this->hashPart($result);
 	}
 
 
@@ -952,25 +952,25 @@ class Markdown_Parser {
 			}xm',
 			array(&$this, '_doHeaders_callback_atx'), $text);
 
-		return 'debug doHeaders: '. $text;
+		/* return 'debug doHeaders: '.*/ return $text;
 	}
 	function _doHeaders_callback_setext($matches) {
 		# Terrible hack to check we haven't found an empty list item.
 		if ($matches[2] == '-' && preg_match('{^-(?: |$)}', $matches[1]))
-			return 'debug _doHeaders_callback_setext: '. $matches[0];
+			/* return 'debug _doHeaders_callback_setext: '.*/ return $matches[0];
 		
 		$level = $matches[2]{0} == '=' ? 1 : 2;
 		// replaced with === header === [Rik, 2012-10-25]
 		//$block = "<h$level>".$this->runSpanGamut($matches[1])."</h$level>";
 		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
-		return 'debug _doHeaders_callback_setext: '. "\n" . $this->hashBlock($block) . "\n\n";
+		/* return 'debug _doHeaders_callback_setext: '.*/ return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 	function _doHeaders_callback_atx($matches) {
 		$level = strlen($matches[1]);
 		// replaced with === header === [Rik, 2012-10-25]
 		//$block = "<h$level>".$this->runSpanGamut($matches[2])."</h$level>";
 		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[2]).str_repeat("=", 7-$level);
-		return 'debug _doHeaders_callback_atx: '. "\n" . $this->hashBlock($block) . "\n\n";
+		/* return 'debug _doHeaders_callback_atx: '.*/ return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 
 
@@ -1038,7 +1038,7 @@ class Markdown_Parser {
 			}
 		}
 
-		return 'debug doLists: '. $text;
+		/* return 'debug doLists: '.*/ return $text;
 	}
 	function _doLists_callback($matches) {
 		# Re-usable patterns to match list item bullets and number markers:
@@ -1056,7 +1056,7 @@ class Markdown_Parser {
 		
 		// remove [Rik, 2012-10-25]
 		//$result = $this->hashBlock("<$list_type>\n" . $result . "</$list_type>");
-		return 'debug _doLists_callback: '. "\n". $result ."\n\n";
+		/* return 'debug _doLists_callback: '.*/ return "\n  ". $result ."\n\n";
 	}
 
 	var $list_level = 0;
@@ -1105,7 +1105,7 @@ class Markdown_Parser {
 			array(&$this, '_processListItems_callback'), $list_str);
 
 		$this->list_level--;
-		return 'debug processListItems: '. $list_str;
+		/* return 'debug processListItems: '.*/ return $list_str;
 	}
 	function _processListItems_callback($matches) {
 		$item = $matches[4];
@@ -1130,7 +1130,7 @@ class Markdown_Parser {
 
 		// replaced with "  * item" [Rik, 2012-10-25]
 		//return "<li>" . $item . "</li>\n";
-		return 'debug _processListItems_callback: '. "  * " . $item . "\n";
+		/* return 'debug _processListItems_callback: '.*/ return "  * " . $item . "\n";
 	}
 
 
@@ -1150,7 +1150,7 @@ class Markdown_Parser {
 			}xm',
 			array(&$this, '_doCodeBlocks_callback'), $text);
 
-		return 'debug doCodeBlocks: '. $text;
+		/* return 'debug doCodeBlocks: '.*/ return $text;
 	}
 	function _doCodeBlocks_callback($matches) {
 		$codeblock = $matches[1];
@@ -1164,7 +1164,7 @@ class Markdown_Parser {
 		// replaced with <code>block</code> [Rik, 2012-10-25]
 		//$codeblock = "<pre><code>$codeblock\n</code></pre>";
 		$codeblock = "<code>$codeblock\n</code>";
-		return 'debug _doCodeBlocks_callback: '. "\n\n".$this->hashBlock($codeblock)."\n\n";
+		/* return 'debug _doCodeBlocks_callback: '.*/ return "\n\n".$this->hashBlock($codeblock)."\n\n";
 	}
 
 
@@ -1349,7 +1349,7 @@ class Markdown_Parser {
 				}
 			}
 		}
-		return 'debug doItalicsAndBold: '. $text_stack[0];
+		/* return 'debug doItalicsAndBold: '.*/ return $text_stack[0];
 	}
 
 
@@ -1366,7 +1366,7 @@ class Markdown_Parser {
 			/xm',
 			array(&$this, '_doBlockQuotes_callback'), $text);
 
-		return 'debug doBlockQuotes: '. $text;
+		/* return 'debug doBlockQuotes: '.*/ return $text;
 	}
 	function _doBlockQuotes_callback($matches) {
 		$bq = $matches[1];
@@ -1380,12 +1380,12 @@ class Markdown_Parser {
 		$bq = preg_replace_callback('{(\s*<pre>.+?</pre>)}sx', 
 			array(&$this, '_doBlockQuotes_callback2'), $bq);
 
-		return 'debug _doBlockQuotes_callback: '. "\n". $this->hashBlock("<blockquote>\n$bq\n</blockquote>")."\n\n";
+		/* return 'debug _doBlockQuotes_callback: '.*/ return "\n". $this->hashBlock("<blockquote>\n$bq\n</blockquote>")."\n\n";
 	}
 	function _doBlockQuotes_callback2($matches) {
 		$pre = $matches[1];
 		$pre = preg_replace('/^  /m', '', $pre);
-		return 'debug _doBlockQuotes_callback2: '. $pre;
+		/* return 'debug _doBlockQuotes_callback2: '.*/ return $pre;
 	}
 
 
@@ -1456,7 +1456,7 @@ class Markdown_Parser {
 			}
 		}
 
-		return 'debug formParagraphs: '. implode("\n\n", $grafs);
+		/* return 'debug formParagraphs: '.*/ return implode("\n\n", $grafs);
 	}
 
 
@@ -1468,7 +1468,7 @@ class Markdown_Parser {
 		$text = $this->encodeAmpsAndAngles($text);
 		// removed [Rik, 2012-10-25]
 		//$text = str_replace('"', '&quot;', $text);
-		return 'debug encodeAttribute: '. $text;
+		/* return 'debug encodeAttribute: '.*/ return $text;
 	}
 	
 	
@@ -1492,7 +1492,7 @@ class Markdown_Parser {
 		// removed [Rik, 2012-10-25]
 		//$text = str_replace('<', '&lt;', $text);
 
-		return 'debug encodeAmpsAndAngles: '. $text;
+		/* return 'debug encodeAmpsAndAngles: '.*/ return $text;
 	}
 
 
@@ -1522,17 +1522,17 @@ class Markdown_Parser {
 			}xi',
 			array(&$this, '_doAutoLinks_email_callback'), $text);
 
-		return 'debug doAutoLinks: '. $text;
+		/* return 'debug doAutoLinks: '.*/ return $text;
 	}
 	function _doAutoLinks_url_callback($matches) {
 		$url = $this->encodeAttribute($matches[1]);
 		$link = "<a href=\"$url\">$url</a>";
-		return 'debug _doAutoLinks_url_callback: '. $this->hashPart($link);
+		/* return 'debug _doAutoLinks_url_callback: '.*/ return $this->hashPart($link);
 	}
 	function _doAutoLinks_email_callback($matches) {
 		$address = $matches[1];
 		$link = $this->encodeEmailAddress($address);
-		return 'debug _doAutoLinks_url_callback: '. $this->hashPart($link);
+		/* return 'debug _doAutoLinks_url_callback: '.*/ return $this->hashPart($link);
 	}
 
 
@@ -1573,7 +1573,7 @@ class Markdown_Parser {
 		$text = implode('', array_slice($chars, 7)); # text without `mailto:`
 		$addr = "<a href=\"$addr\">$text</a>";
 
-		return 'debug encodeEmailAddress: '. $addr;
+		/* return 'debug encodeEmailAddress: '.*/ return $addr;
 	}
 
 
@@ -1629,7 +1629,7 @@ class Markdown_Parser {
 			}
 		}
 		
-		return 'debug parseSpan: '. $output;
+		/* return 'debug parseSpan: '.*/ return $output;
 	}
 	
 	
@@ -1640,7 +1640,7 @@ class Markdown_Parser {
 	#
 		switch ($token{0}) {
 			case "\\":
-				return 'debug handleSpanToken: '. $this->hashPart("&#". ord($token{1}). ";");
+				/* return 'debug handleSpanToken: '.*/ return $this->hashPart("&#". ord($token{1}). ";");
 			case "`":
 				# Search for end marker in remaining text.
 				if (preg_match('/^(.*?[^`])'.preg_quote($token).'(?!`)(.*)$/sm', 
@@ -1648,11 +1648,11 @@ class Markdown_Parser {
 				{
 					$str = $matches[2];
 					$codespan = $this->makeCodeSpan($matches[1]);
-					return 'debug handleSpanToken: '. $this->hashPart($codespan);
+					/* return 'debug handleSpanToken: '.*/ return $this->hashPart($codespan);
 				}
-				return 'debug handleSpanToken: '. $token; // return as text since no ending marker found.
+				/* return 'debug handleSpanToken: '.*/ return $token; // return as text since no ending marker found.
 			default:
-				return 'debug handleSpanToken: '. $this->hashPart($token);
+				/* return 'debug handleSpanToken: '.*/ return $this->hashPart($token);
 		}
 	}
 
@@ -1661,7 +1661,7 @@ class Markdown_Parser {
 	#
 	# Remove one level of line-leading tabs or spaces
 	#
-		return 'debug outdent: '. preg_replace('/^(\t|[ ]{1,'.$this->tab_width.'})/m', '', $text);
+		/* return 'debug outdent: '.*/ return preg_replace('/^(\t|[ ]{1,'.$this->tab_width.'})/m', '', $text);
 	}
 
 
@@ -1680,7 +1680,7 @@ class Markdown_Parser {
 		$text = preg_replace_callback('/^.*\t.*$/m',
 			array(&$this, '_detab_callback'), $text);
 
-		return 'debug detab: '. $text;
+		/* return 'debug detab: '.*/ return $text;
 	}
 	function _detab_callback($matches) {
 		$line = $matches[0];
@@ -1697,7 +1697,7 @@ class Markdown_Parser {
 				$strlen($line, 'UTF-8') % $this->tab_width;
 			$line .= str_repeat(" ", $amount) . $block;
 		}
-		return 'debug _detab_callback: '. $line;
+		/* return 'debug _detab_callback: '.*/ return $line;
 	}
 	function _initDetab() {
 	#
@@ -1717,11 +1717,11 @@ class Markdown_Parser {
 	#
 	# Swap back in all the tags hashed by _HashHTMLBlocks.
 	#
-		return 'debug unhash: '. preg_replace_callback('/(.)\x1A[0-9]+\1/', 
+		/* return 'debug unhash: '.*/ return preg_replace_callback('/(.)\x1A[0-9]+\1/', 
 			array(&$this, '_unhash_callback'), $text);
 	}
 	function _unhash_callback($matches) {
-		return 'debug _unhash_callback: '. $this->html_hashes[$matches[0]];
+		/* return 'debug _unhash_callback: '.*/ return $this->html_hashes[$matches[0]];
 	}
 
 }
@@ -1861,7 +1861,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 		#
 		list($text, ) = $this->_hashHTMLBlocks_inMarkdown($text);
 		
-		return 'debug hashHTMLBlocks: '. $text;
+		/* return 'debug hashHTMLBlocks: '.*/ return $text;
 	}
 	function _hashHTMLBlocks_inMarkdown($text, $indent = 0, 
 										$enclosing_tag_re = '', $span = false)
@@ -2273,7 +2273,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 	# in $text, it pass through this function and is automaticaly escaped, 
 	# blocking invalid nested overlap.
 	#
-		return 'debug hashClean: '. $this->hashPart($text, 'C');
+		/* return 'debug hashClean: '.*/ return $this->hashPart($text, 'C');
 	}
 
 
@@ -2315,21 +2315,21 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			}xm',
 			array(&$this, '_doHeaders_callback_atx'), $text);
 
-		return 'debug doHeaders: '. $text;
+		/* return 'debug doHeaders: '.*/ return $text;
 	}
 	function _doHeaders_attr($attr) {
-		if (empty($attr))  return 'debug _doHeaders_attr: '. "";
-		return 'debug _doHeaders_attr: '. " id=\"$attr\"";
+		if (empty($attr))  /* return 'debug _doHeaders_attr: '.*/ return "";
+		/* return 'debug _doHeaders_attr: '.*/ return " id=\"$attr\"";
 	}
 	function _doHeaders_callback_setext($matches) {
 		if ($matches[3] == '-' && preg_match('{^- }', $matches[1]))
-			return 'debug _doHeaders_callback_setext: '. $matches[0];
+			/* return 'debug _doHeaders_callback_setext: '.*/ return $matches[0];
 		$level = $matches[3]{0} == '=' ? 1 : 2;
 		$attr  = $this->_doHeaders_attr($id =& $matches[2]);
 		// replaced with === header === [Rik, 2012-10-25]
 		//$block = "<h$level$attr>".$this->runSpanGamut($matches[1])."</h$level>";
 		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[1]).str_repeat("=", 7-$level);
-		return 'debug _doHeaders_callback_setext: '. "\n" . $this->hashBlock($block) . "\n\n";
+		/* return 'debug _doHeaders_callback_setext: '.*/ return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 	function _doHeaders_callback_atx($matches) {
 		$level = strlen($matches[1]);
@@ -2337,7 +2337,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 		// replaced with === header === [Rik, 2012-10-25]
 		//$block = "<h$level$attr>".$this->runSpanGamut($matches[2])."</h$level>";
 		$block = str_repeat("=", 7-$level).$this->runSpanGamut($matches[2]).str_repeat("=", 7-$level);
-		return 'debug _doHeaders_callback_atx: '. "\n" . $this->hashBlock($block) . "\n\n";
+		/* return 'debug _doHeaders_callback_atx: '.*/ return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 
 
@@ -2400,7 +2400,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			}xm',
 			array(&$this, '_DoTable_callback'), $text);
 
-		return 'debug doTables: '. $text;
+		/* return 'debug doTables: '.*/ return $text;
 	}
 	function _doTable_leadingPipe_callback($matches) {
 		$head		= $matches[1];
@@ -2410,7 +2410,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 		# Remove leading pipe for each row.
 		$content	= preg_replace('/^ *[|]/m', '', $content);
 		
-		return 'debug _doTable_leadingPipe_callback: '. $this->_doTable_callback(array($matches[0], $head, $underline, $content));
+		/* return 'debug _doTable_leadingPipe_callback: '.*/ return $this->_doTable_callback(array($matches[0], $head, $underline, $content));
 	}
 	function _doTable_callback($matches) {
 		$head		= $matches[1];
@@ -2467,7 +2467,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 		$text .= "</tbody>\n";
 		$text .= "</table>";
 		
-		return 'debug _doTable_callback: '. $this->hashBlock($text) . "\n";
+		/* return 'debug _doTable_callback: '.*/ return $this->hashBlock($text) . "\n";
 	}
 
 	
@@ -2511,7 +2511,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			}mx',
 			array(&$this, '_doDefLists_callback'), $text);
 
-		return 'debug doDefLists: '. $text;
+		/* return 'debug doDefLists: '.*/ return $text;
 	}
 	function _doDefLists_callback($matches) {
 		# Re-usable patterns to match list item bullets and number markers:
@@ -2521,7 +2521,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 		# paragraph for the last item in a list, if necessary:
 		$result = trim($this->processDefListItems($list));
 		$result = "<dl>\n" . $result . "\n</dl>";
-		return 'debug _doDefLists_callback: '. $this->hashBlock($result) . "\n\n";
+		/* return 'debug _doDefLists_callback: '.*/ return $this->hashBlock($result) . "\n\n";
 	}
 
 
@@ -2566,7 +2566,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			}xm',
 			array(&$this, '_processDefListItems_callback_dd'), $list_str);
 
-		return 'debug processDefListItems: '. $list_str;
+		/* return 'debug processDefListItems: '.*/ return $list_str;
 	}
 	function _processDefListItems_callback_dt($matches) {
 		$terms = explode("\n", trim($matches[1]));
@@ -2575,7 +2575,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			$term = $this->runSpanGamut(trim($term));
 			$text .= "\n<dt>" . $term . "</dt>";
 		}
-		return 'debug _processDefListItems_callback_dt: '. $text . "\n";
+		/* return 'debug _processDefListItems_callback_dt: '.*/ return $text . "\n";
 	}
 	function _processDefListItems_callback_dd($matches) {
 		$leading_line	= $matches[1];
@@ -2593,7 +2593,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			$def = $this->runSpanGamut($this->outdent($def));
 		}
 
-		return 'debug _processDefListItems_callback_dd: '. "\n<dd>" . $def . "</dd>\n";
+		/* return 'debug _processDefListItems_callback_dd: '.*/ return "\n<dd>" . $def . "</dd>\n";
 	}
 
 
@@ -2628,7 +2628,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			}xm',
 			array(&$this, '_doFencedCodeBlocks_callback'), $text);
 
-		return 'debug doFencedCodeBlocks: '. $text;
+		/* return 'debug doFencedCodeBlocks: '.*/ return $text;
 	}
 	function _doFencedCodeBlocks_callback($matches) {
 		$codeblock = $matches[2];
@@ -2636,10 +2636,10 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 		$codeblock = preg_replace_callback('/^\n+/',
 			array(&$this, '_doFencedCodeBlocks_newlines'), $codeblock);
 		$codeblock = "<pre><code>$codeblock</code></pre>";
-		return 'debug _doFencedCodeBlocks_callback: '. "\n\n".$this->hashBlock($codeblock)."\n\n";
+		/* return 'debug _doFencedCodeBlocks_callback: '.*/ return "\n\n".$this->hashBlock($codeblock)."\n\n";
 	}
 	function _doFencedCodeBlocks_newlines($matches) {
-		return 'debug _doFencedCodeBlocks_newlines: '. str_repeat("<br$this->empty_element_suffix", 
+		/* return 'debug _doFencedCodeBlocks_newlines: '.*/ return str_repeat("<br$this->empty_element_suffix", 
 			strlen($matches[0]));
 	}
 
@@ -2698,7 +2698,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 		# Finish by removing any tag hashes still present in $text.
 		$text = $this->unhash($text);
 		
-		return 'debug formParagraphs: '. $text;
+		/* return 'debug formParagraphs: '.*/ return $text;
 	}
 	
 	
@@ -2729,12 +2729,12 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			}xm',
 			array(&$this, '_stripFootnotes_callback'),
 			$text);
-		return 'debug stripFootnotes: '. $text;
+		/* return 'debug stripFootnotes: '.*/ return $text;
 	}
 	function _stripFootnotes_callback($matches) {
 		$note_id = $this->fn_id_prefix . $matches[1];
 		$this->footnotes[$note_id] = $this->outdent($matches[2]);
-		return 'debug _stripFootnotes_callback: '. ''; # String that will replace the block
+		/* return 'debug _stripFootnotes_callback: '.*/ return ''; # String that will replace the block
 	}
 
 
@@ -2746,7 +2746,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 		if (!$this->in_anchor) {
 			$text = preg_replace('{\[\^(.+?)\]}', "F\x1Afn:\\1\x1A:", $text);
 		}
-		return 'debug doFootnotes: '. $text;
+		/* return 'debug doFootnotes: '.*/ return $text;
 	}
 
 	
@@ -2805,7 +2805,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			$text .= "</ol>\n";
 			$text .= "</div>";
 		}
-		return 'debug appendFootnotes: '. $text;
+		/* return 'debug appendFootnotes: '.*/ return $text;
 	}
 	function _appendFootnotes_callback($matches) {
 		$node_id = $this->fn_id_prefix . $matches[1];
@@ -2833,13 +2833,13 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			$attr = str_replace("%%", $num, $attr);
 			$node_id = $this->encodeAttribute($node_id);
 			
-			return 'debug _appendFootnotes_callback: '.
+			/* return 'debug _appendFootnotes_callback: '.*/ return
 				"<sup id=\"fnref:$node_id\">".
 				"<a href=\"#fn:$node_id\"$attr>$num</a>".
 				"</sup>";
 		}
 		
-		return 'debug _appendFootnotes_callback: '. "[^".$matches[1]."]";
+		/* return 'debug _appendFootnotes_callback: '.*/ return "[^".$matches[1]."]";
 	}
 		
 	
@@ -2858,7 +2858,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			}xm',
 			array(&$this, '_stripAbbreviations_callback'),
 			$text);
-		return 'debug stripAbbreviations: '. $text;
+		/* return 'debug stripAbbreviations: '.*/ return $text;
 	}
 	function _stripAbbreviations_callback($matches) {
 		$abbr_word = $matches[1];
@@ -2867,7 +2867,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			$this->abbr_word_re .= '|';
 		$this->abbr_word_re .= preg_quote($abbr_word);
 		$this->abbr_desciptions[$abbr_word] = trim($abbr_desc);
-		return 'debug _stripAbbreviations_callback: '. ''; # String that will replace the block
+		/* return 'debug _stripAbbreviations_callback: '.*/ return ''; # String that will replace the block
 	}
 	
 	
@@ -2885,20 +2885,20 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 				'}', 
 				array(&$this, '_doAbbreviations_callback'), $text);
 		}
-		return 'debug doAbbreviations: '. $text;
+		/* return 'debug doAbbreviations: '.*/ return $text;
 	}
 	function _doAbbreviations_callback($matches) {
 		$abbr = $matches[0];
 		if (isset($this->abbr_desciptions[$abbr])) {
 			$desc = $this->abbr_desciptions[$abbr];
 			if (empty($desc)) {
-				return 'debug _doAbbreviations_callback: '. $this->hashPart("<abbr>$abbr</abbr>");
+				/* return 'debug _doAbbreviations_callback: '.*/ return $this->hashPart("<abbr>$abbr</abbr>");
 			} else {
 				$desc = $this->encodeAttribute($desc);
-				return 'debug _doAbbreviations_callback: '. $this->hashPart("<abbr title=\"$desc\">$abbr</abbr>");
+				/* return 'debug _doAbbreviations_callback: '.*/ return $this->hashPart("<abbr title=\"$desc\">$abbr</abbr>");
 			}
 		} else {
-			return 'debug _doAbbreviations_callback: '. $matches[0];
+			/* return 'debug _doAbbreviations_callback: '.*/ return $matches[0];
 		}
 	}
 
