@@ -1056,7 +1056,7 @@ class Markdown_Parser {
 		
 		// remove [Rik, 2012-10-25]
 		//$result = $this->hashBlock("<$list_type>\n" . $result . "</$list_type>");
-		/* return 'debug _doLists_callback: '.*/ return "\n". $result ."\n\n";
+		/* return 'debug _doLists_callback: '.*/ return "\n  ". $result ."\n\n";
 	}
 
 	var $list_level = 0;
@@ -1130,7 +1130,7 @@ class Markdown_Parser {
 
 		// replaced with "  * item" [Rik, 2012-10-25]
 		//return "<li>" . $item . "</li>\n";
-		/* return 'debug _processListItems_callback: '.*/ return "\n  * " . $item;
+		/* return 'debug _processListItems_callback: '.*/ return "  * " . $item . "\n";
 	}
 
 
