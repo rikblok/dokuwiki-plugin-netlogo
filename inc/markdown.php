@@ -1130,7 +1130,7 @@ class Markdown_Parser {
 
 		// replaced with "  * item" [Rik, 2012-10-25]
 		//return "<li>" . $item . "</li>\n";
-		/* return 'debug _processListItems_callback: '.*/ return "  * " . $item . "\n";
+		/* return 'debug _processListItems_callback: '.*/ return "\n  * " . $item;
 	}
 
 
