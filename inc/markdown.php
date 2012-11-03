@@ -573,8 +573,8 @@ class Markdown_Parser {
 		"doHeaders"         => 10,
 		"doHorizontalRules" => 20,
 		
-//		"doLists"           => 40,				// removed [Rik, 2012-10-25]
-//		"doCodeBlocks"      => 50,			// removed [Rik, 2012-11-02]
+		"doLists"           => 40,				// reinstated [Rik, 2012-11-02]
+		"doCodeBlocks"      => 50,			// reinstated [Rik, 2012-11-02]
 //		"doBlockQuotes"     => 60,			// removed [Rik, 2012-10-25]
 		);
 
