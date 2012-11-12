@@ -6,7 +6,6 @@
  * @author  Rik Blok <rik.blok@ubc.ca>
  *
  * ToDo:
- *	* improve "do=info|code".  Use p_render()? [Rik, 2012-10-19]
  *	* automatically add "nlogo    !application/octet-stream" to conf/mime.local.conf? [Rik, 2012-10-19]
  *	* language support [Rik, 2012-10-19]
  *	* better error messages [Rik, 2012-10-19]
@@ -251,7 +250,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$urlcopyright= $urlroot.'/docs/copyright.html';
 		$dirname = dirname($libjar);
 		if (!is_dir($dirname))			mkdir($dirname, 0755, true);
-		if (!file_exists($libjar))		io_download($urljar,    $libjar, false, '', 35904890); // max size = 10x latest (v5.0.2)
+		// fix Fatal error: Allowed memory size of ___ bytes exhausted (tried to allocate ___ bytes) in /___/inc/HTTPClient.php on line ___
+		ini_set('memory_limit', '100M');
+		if (!file_exists($libjar))		io_download($urljar, $libjar, false, '', 35904890); // max size = 10x latest (v5.0.2)
 		if (!file_exists($libjargz))	io_download($urljargz, $libjargz, false, '', 5394750); // max size = 10x latest (v5.0.2)
 		if (!file_exists($copyright))	io_download($urlcopyright, $copyright, false, '', 268200); // max size = 10x latest (v5.0.2)
 
