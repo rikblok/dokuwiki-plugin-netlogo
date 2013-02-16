@@ -28,7 +28,6 @@ if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 
 require_once DOKU_PLUGIN.'syntax.php';
 require_once DOKU_PLUGIN.'netlogo/inc/support.php';
-//require_once DOKU_PLUGIN.'netlogo/inc/markdown.php';
 
 class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
     public function getType() {
@@ -194,7 +193,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 
 		// parse file to get contents
-		if (is_null($data['version']) || is_null($data['width']) || is_null($data['height']) || $data['do']==='code' || $data['do']==='info') {
+		if (is_null($data['version']) || is_null($data['width']) || is_null($data['height']) || $data['do']==='code' || $data['do']==='info' || $data['do']==='mdinfo') {
 			$nlogo = file_get_contents($src);
 			$nlogoparts = explode('@#$#@#$#@', $nlogo);
 			/*
@@ -221,7 +220,11 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			
 			// show info
 			if ($data['do']==='info') {
-				//$renderer->doc .= p_render('xhtml',p_get_instructions(Markdown($nlogoparts[2])),$info);
+				$renderer->doc .= p_render('xhtml',p_get_instructions($nlogoparts[2]),$info);
+				return true;
+			}
+			// show info wrapped in '<markdown>...</markdown>' tags
+			if ($data['do']==='mdinfo') {
 				$renderer->doc .= p_render('xhtml',p_get_instructions('<markdown>' . $nlogoparts[2] . '</markdown>'),$info);
 				return true;
 			}
