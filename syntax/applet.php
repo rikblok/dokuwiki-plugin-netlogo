@@ -303,10 +303,14 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 		$codebase = dirname('data/media/'.$src).'/'; // try find path to media folder for includes [Rik, 2013-09-21]
 		$cheat = '/~rikblok/wiki/';
+		/*
+			codebase
+			revision 3 - .nlogo file without includes works.  How about with nls?
+		*/
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
-								. '    codebase="'.$codebase.'"'						// is it possible to include .nls files in $src folder? [Rik, 2013-09-21]
+								. '    codebase="'.$cheat.$codebase.'"'						// is it possible to include .nls files in $src folder? [Rik, 2013-09-21]
 								. '    archive="'.$cheat.'lib/plugins/netlogo/libraries/'.$data['version'].'/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
