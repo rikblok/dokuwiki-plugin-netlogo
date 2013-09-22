@@ -301,7 +301,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$pcenter = true;
 			$data['align']=null;
 		}
-		$codebase = dirname('data/media/'.$src).'/'; // try find path to media folder for includes [Rik, 2013-09-21]
+		$codebase = 'data/tmp/'; // try find path to media folder for includes [Rik, 2013-09-21]
 		$cheat = '/~rikblok/wiki/';
 		/*
 			codebase
