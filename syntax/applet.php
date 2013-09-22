@@ -260,6 +260,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		if (!file_exists($libjargz))	io_download($urljargz, $libjargz, false, '', 5394750); // max size = 10x latest (v5.0.2)
 		if (!file_exists($copyright))	io_download($urlcopyright, $copyright, false, '', 268200); // max size = 10x latest (v5.0.2)
 
+		// can run jar from media folder?  May allow includes [Rik, 2013-09-21]
+		copy($libjar, DOKU_INC.'data/media/');
+		
 		// check if jar files exist
 		if (!file_exists($libjar)) {
 			$renderer->doc .= '<div class="error">NetLogo: NetLogoLite.jar version not found: ' . $data['version'] . '</div>';
@@ -305,19 +308,21 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$cheat = '/~rikblok/wiki/';
 		/*
 			codebase
-			revision 3 - .nlogo file without includes works.  How about with nls?
+			revision 3 - .nlogo file without includes works.  But not with .nls
+			revision 4 - same
+			revision 5?
 		*/
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
-								. '    codebase="'.$cheat.$codebase.'"'						// is it possible to include .nls files in $src folder? [Rik, 2013-09-21]
-								. '    archive="'.$cheat.'lib/plugins/netlogo/libraries/'.$data['version'].'/NetLogoLite.jar"'
+								. '    codebase="'.$codebase.'"'
+								. '    archive="NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
-								. '      value="'.$cheat.'lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">'
+								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">'
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
