@@ -304,6 +304,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
+								. '    codebase="'.$src.'"'						// is it possible to include .nls files in $src folder? [Rik, 2013-09-21]
 								. '    archive="lib/plugins/netlogo/libraries/'.$data['version'].'/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
