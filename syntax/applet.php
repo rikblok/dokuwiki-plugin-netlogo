@@ -308,13 +308,13 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			revision 3 - .nlogo file without includes works.  But not with .nls
 			revision 4 - same
 			revision 5 - can't find jar
-			revision 6 - ??
+			revision 6 - can't find jar
+			revision 7 - ??
 		*/
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
-								. '    codebase="'.$codebase.'"'
-								. '    archive="netlogolite.jar"'
+								. '    archive="'.$codebase.'netlogolite.jar"'
 //								. '    archive="NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
