@@ -309,7 +309,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			revision 4 - same
 			revision 5 - can't find jar
 			revision 6 - can't find jar
-			revision 7 - ??
+			revision 7 - incompatible magic value.  I think it found the jar but not the nlogo file
+			revision 8 - ??
 		*/
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
@@ -321,7 +322,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
-								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">'
+								. '      value="'.basename($src).'.nlogo">'
+//								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">'
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
