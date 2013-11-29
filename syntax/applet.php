@@ -55,9 +55,11 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$this->Lexer->addSpecialPattern('\{\{[^\}\|]+\.nlogo\?[^\} ]*do=download[^\} ]* ?\}\}',$mode,'media');		// with do=download parameter
 		$this->Lexer->addSpecialPattern('\{\{[^\}\|]+\.nlogo ?\}\}',$mode,'plugin_netlogo_applet');									// without parameters
 		$this->Lexer->addSpecialPattern('\{\{[^\}\|]+\.nlogo\?[^\} ]+ ?\}\}',$mode,'plugin_netlogo_applet');				// with other parameters
+		$this->Lexer->addSpecialPattern('\{\{[^\}\|]+\.nlogo ?\|\}\}',$mode,'plugin_netlogo_applet');									// with empty title [Rik, 2013-11-16]
 		// here are some test cases [Rik, 2012-10-12]
 		/*
 			// should work
+			{{ugh.nlogo|}}
 			{{ugh.nlogo}}
 			{{ugh.nlogo }}
 			{{ ugh.nlogo }}
