@@ -51,9 +51,10 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 
     public function connectTo($mode) {
-		$this->Lexer->addSpecialPattern('\{\{[^\}]+\.nlogo\?[^\} ]*do=download[^\} ]* ?\}\}',$mode,'media');		// with do=download parameter
-		$this->Lexer->addSpecialPattern('\{\{[^\}]+\.nlogo ?\}\}',$mode,'plugin_netlogo_applet');									// without parameters
-		$this->Lexer->addSpecialPattern('\{\{[^\}]+\.nlogo\?[^\} ]+ ?\}\}',$mode,'plugin_netlogo_applet');				// with other parameters
+		// make regex less greedy so it doesn't include pipe in filename, eg. only match first ugh.nlogo in {{ugh.nlogo|Download ugh.nlogo}} [Rik, 2013-11-28]]
+		$this->Lexer->addSpecialPattern('\{\{[^\}\|]+\.nlogo\?[^\} ]*do=download[^\} ]* ?\}\}',$mode,'media');		// with do=download parameter
+		$this->Lexer->addSpecialPattern('\{\{[^\}\|]+\.nlogo ?\}\}',$mode,'plugin_netlogo_applet');									// without parameters
+		$this->Lexer->addSpecialPattern('\{\{[^\}\|]+\.nlogo\?[^\} ]+ ?\}\}',$mode,'plugin_netlogo_applet');				// with other parameters
 		// here are some test cases [Rik, 2012-10-12]
 		/*
 			// should work
@@ -301,16 +302,24 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$pcenter = true;
 			$data['align']=null;
 		}
+		$codebase = 'data/tmp/'; // try find path to media folder for includes [Rik, 2013-09-21]
+		$cheat = '/~rikblok/wiki/';
+		/*
+			codebase
+			revision 3 - .nlogo file without includes works.  How about with nls?
+		*/
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
-								. '    archive="lib/plugins/netlogo/libraries/'.$data['version'].'/NetLogoLite.jar"'
+								. '    codebase="'.$cheat.$codebase.'"'						// is it possible to include .nls files in $src folder? [Rik, 2013-09-21]
+								. '    archive="'.$cheat.'lib/plugins/netlogo/libraries/'.$data['version'].'/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
 		$renderer->doc .= '>'
 								. '  <param name="DefaultModel"'
-								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">'
+								. '      value="'.basename($src).'">'
+//								. '      value="'.$cheat.'lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">'
 								. '  <param name="java_arguments"'
 								. '      value="-Djnlp.packEnabled=true">'
 								. '</applet>';
