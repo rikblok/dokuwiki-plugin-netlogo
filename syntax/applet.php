@@ -90,7 +90,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 //        $this->Lexer->addExitPattern('</FIXME>','plugin_netlogo_applet');
 //    }
 
-    public function handle($match, $state, $pos, &$handler){
+    public function handle($match, $state, $pos, Doku_Handler $handler){
 		/*
 		 * Copied from DokuWiki media handler in
 		 * http://xref.dokuwiki.org/reference/dokuwiki/_functions/doku_handler_parse_media.html
@@ -177,7 +177,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		return $params;
     }
 
-    public function render($mode, &$renderer, $data) {
+    public function render($mode, Doku_Renderer $renderer, $data) {
 		global $ID, $conf;
 		
         if($mode != 'xhtml') return false;
