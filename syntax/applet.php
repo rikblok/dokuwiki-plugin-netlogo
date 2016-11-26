@@ -184,6 +184,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
 		// check .nlogo file read permission
 		$src = $data['src'];
+		/* testing: disable filetype checking.  Does this allow remote download of file, eg. from github? [Rik, 2016-11-25]
 		resolve_mediaid(getNS($ID),$src,$exists);
 		if(auth_quickaclcheck(getNS($src).':X') < AUTH_READ){ // auth_quickaclcheck() mimicked from http://xref.dokuwiki.org/reference/dokuwiki/_functions/checkfilestatus.html
 			$renderer->doc .= '<div class="error">NetLogo: File not allowed: ' . $src . '</div>';
@@ -194,6 +195,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$renderer->doc .= '<div class="error">NetLogo: File not found: ' . $src . '</div>';
 			return true;
 		}
+		*/
 
 		// parse file to get contents
 		if (is_null($data['version']) || is_null($data['width']) || is_null($data['height']) || $data['do']==='code' || $data['do']==='info' || $data['do']==='mdinfo') {
