@@ -66,10 +66,10 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			{{ ugh.nlogo}}
 
 			// should work
-			{{ugh.nlogo?818x611&version=5.0.1}}
-			{{ugh.nlogo?818x611&version=5.0.1 }}
-			{{ ugh.nlogo?818x611&version=5.0.1 }}
-			{{ ugh.nlogo?818x611&version=5.0.1}}
+			{{ugh.nlogo?818x611}}
+			{{ugh.nlogo?818x611 }}
+			{{ ugh.nlogo?818x611 }}
+			{{ ugh.nlogo?818x611}}
 
 			// should fail
 			{{ugh.nlogo.x}}
@@ -78,10 +78,10 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			{{ ugh.nlogo.x}}
 
 			// should fail
-			{{ugh.nlogo.x?818x611&version=5.0.1}}
-			{{ugh.nlogo.x?818x611&version=5.0.1 }}
-			{{ ugh.nlogo.x?818x611&version=5.0.1 }}
-			{{ ugh.nlogo.x?818x611&version=5.0.1}}
+			{{ugh.nlogo.x?818x611}}
+			{{ugh.nlogo.x?818x611 }}
+			{{ ugh.nlogo.x?818x611 }}
+			{{ ugh.nlogo.x?818x611}}
 		*/
 //        $this->Lexer->addEntryPattern('<FIXME>',$mode,'plugin_netlogo_applet');
     }
@@ -143,14 +143,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$h = NULL;
 		}
 
-		// parse version number.  See all versions: http://ccl.northwestern.edu/netlogo/oldversions.shtml
-		if (preg_match('#version=(\d+\.\d+(\.?[\w]*)?)#',$param,$version)){
-			// specified by user
-			$ver = $version[1];
-		} else {
-			$ver = NULL;
-		}
-		
 		// parse 'do' action
 		if (preg_match('#do=([a-z]+)#',$param,$action)){
 			// specified by user
@@ -170,7 +162,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			'align'=>$align,
 			'width'=>$w,
 			'height'=>$h,
-			'version'=>$ver,
 			'do'=>$do,
 		);
 
@@ -198,7 +189,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		*/
 
 		// parse file to get contents
-		if (is_null($data['version']) || is_null($data['width']) || is_null($data['height']) || $data['do']==='code' || $data['do']==='info' || $data['do']==='mdinfo') {
+		if (is_null($data['width']) || is_null($data['height']) || $data['do']==='code' || $data['do']==='info' || $data['do']==='mdinfo') {
 			$nlogo = file_get_contents($src);
 			$nlogoparts = explode('@#$#@#$#@', $nlogo);
 			/*
@@ -234,11 +225,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 				return true;
 			}
 			
-			// version?
-			if (is_null($data['version'])) {
-				preg_match('/NetLogo (\d+\.\d+(\.?[\w]*)?)/',$nlogoparts[4],$version);
-				$data['version'] = $version[1];
-			}
 			// width & height?
 			if (is_null($data['width']) || is_null($data['height'])) {
 				// store x,y coordinates of bottom right corner in $rightbottom[2] & $rightbottom[3], respectively
@@ -249,8 +235,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 		
 		// download libraries? Todo: move root url to config option
-		$libroot = 'lib/plugins/netlogo/libraries/'.$data['version'];
-		$urlroot = 'http://ccl.northwestern.edu/netlogo/'.$data['version'];
+		$libroot = 'lib/plugins/netlogo/libraries/';
+		$urlroot = 'http://ccl.northwestern.edu/netlogo/';
 		$libjar= $libroot.'/NetLogoLite.jar';
 		$libjargz= $libroot.'/NetLogoLite.jar.pack.gz';
 		$copyright= $libroot.'/copyright.html';
@@ -267,7 +253,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 		// check if jar files exist
 		if (!file_exists($libjar)) {
-			$renderer->doc .= '<div class="error">NetLogo: NetLogoLite.jar version not found: ' . $data['version'] . '</div>';
+			$renderer->doc .= '<div class="error">NetLogo: NetLogoLite.jar version not found. '</div>';
 			return true;
 		}
 
@@ -309,7 +295,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
-								. '    archive="lib/plugins/netlogo/libraries/'.$data['version'].'/NetLogoLite.jar"'
+								. '    archive="lib/plugins/netlogo/libraries/NetLogoLite.jar"'
 								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
 		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
 		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
