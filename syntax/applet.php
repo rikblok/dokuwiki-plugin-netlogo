@@ -178,6 +178,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
 		// check .nlogo file read permission
 		$src = $data['src'];
+		alert(resolve_mediaid(getNS($ID),$src,$exists))
 		/* testing: disable filetype checking.  Does this allow remote download of file, eg. from github? [Rik, 2016-11-25]
 		resolve_mediaid(getNS($ID),$src,$exists);
 		if(auth_quickaclcheck(getNS($src).':X') < AUTH_READ){ // auth_quickaclcheck() mimicked from http://xref.dokuwiki.org/reference/dokuwiki/_functions/checkfilestatus.html
@@ -232,7 +233,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			if (is_null($data['width']) || is_null($data['height'])) {
 				// store x,y coordinates of bottom right corner in $rightbottom[2] & $rightbottom[3], respectively
 				preg_match_all('/(^|\n)\n[A-Z\-]+\n[0-9]+\n[0-9]+\n([0-9]+)\n([0-9]+)\n/',$nlogoparts[1],$rightbottom);
-				if (is_null($data['width']))	$data['width'] = max($rightbottom[2])+100;
+				if (is_null($data['width']))	$data['width'] = max($rightbottom[2])+50;
 				if (is_null($data['height']))	$data['height'] = max($rightbottom[3])+300;
 			}
 		}
