@@ -237,28 +237,9 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			}
 		}
 		
+		
 		// download libraries? Todo: move root url to config option
-		$libroot = 'lib/plugins/netlogo/libraries/';
 		$urlroot = 'http://ccl.northwestern.edu/netlogo/';
-		$libjar= $libroot.'/NetLogoLite.jar';
-		$libjargz= $libroot.'/NetLogoLite.jar.pack.gz';
-		$copyright= $libroot.'/copyright.html';
-		$urljar= $urlroot.'/NetLogoLite.jar';
-		$urljargz= $urlroot.'/NetLogoLite.jar.pack.gz';
-		$urlcopyright= $urlroot.'/docs/copyright.html';
-		$dirname = dirname($libjar);
-		if (!is_dir($dirname))			mkdir($dirname, 0755, true);
-		// fix Fatal error: Allowed memory size of ___ bytes exhausted (tried to allocate ___ bytes) in /___/inc/HTTPClient.php on line ___
-		ini_set('memory_limit', '100M');
-		if (!file_exists($libjar))		io_download($urljar, $libjar, false, '', 35904890); // max size = 10x latest (v5.0.2)
-		if (!file_exists($libjargz))	io_download($urljargz, $libjargz, false, '', 5394750); // max size = 10x latest (v5.0.2)
-		if (!file_exists($copyright))	io_download($urlcopyright, $copyright, false, '', 268200); // max size = 10x latest (v5.0.2)
-
-		// check if jar files exist
-		if (!file_exists($libjar)) {
-			$renderer->doc .= '<div class="error">NetLogo: NetLogoLite.jar version not found. </div>';
-			return true;
-		}
 
 		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
 		$src = relativePath(DOKU_INC.'data/media/',$src);
@@ -297,17 +278,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
-		$renderer->doc .= '<applet code="org.nlogo.lite.Applet"'
-								. '    archive="lib/plugins/netlogo/libraries/NetLogoLite.jar"'
-								. '    width="'.$data['width'].'" height="'.$data['height'].'"';
-		if (!is_null($data['align']))	$renderer->doc .= ' align="'.$data['align'].'"';
-		if (!is_null($data['title']))	$renderer->doc .= ' alt="'.$data['title'].'"';
-		$renderer->doc .= '>'
-								. '  <param name="DefaultModel"'
-								. '      value="lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'">'
-								. '  <param name="java_arguments"'
-								. '      value="-Djnlp.packEnabled=true">'
-								. '</applet>';
+		$renderer->doc .= '<iframe title="" src="http://netlogoweb.org/web?'.$src.' style="width:'.$data['width'].'; height:'.$data['height'].'"></iframe>';
 		if ($pcenter) $renderer->doc .= '</p>';
         return true;
     }
