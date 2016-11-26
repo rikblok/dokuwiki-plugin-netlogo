@@ -232,8 +232,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			if (is_null($data['width']) || is_null($data['height'])) {
 				// store x,y coordinates of bottom right corner in $rightbottom[2] & $rightbottom[3], respectively
 				preg_match_all('/(^|\n)\n[A-Z\-]+\n[0-9]+\n[0-9]+\n([0-9]+)\n([0-9]+)\n/',$nlogoparts[1],$rightbottom);
-				if (is_null($data['width']))	$data['width'] = max($rightbottom[2]);
-				if (is_null($data['height']))	$data['height'] = max($rightbottom[3]);
+				if (is_null($data['width']))	$data['width'] = max($rightbottom[2])+100;
+				if (is_null($data['height']))	$data['height'] = max($rightbottom[3])+300;
 			}
 		}
 		
@@ -279,7 +279,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
-		$renderer->doc .= '<iframe title="" src="http://netlogoweb.org/web?'.$src.'" style="width:'.$data['width'].'; height:'.$data['height'].'"></iframe>';
+		$renderer->doc .= '<iframe title="" src="http://netlogoweb.org/web?'.$src.'" style="width:'.$data['width'].'px; height:'.$data['height'].'px"></iframe>';
 		if ($pcenter) $renderer->doc .= '</p>';
         return true;
     }
