@@ -242,7 +242,8 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		$urlroot = 'http://ccl.northwestern.edu/netlogo/';
 
 		// $src is currently realpath.  Turn into relative path from DokuWiki media folder
-		$src = relativePath(DOKU_INC.'data/media/',$src);
+		// temporarily disabled while testing remote urls [Rik, 2016-11-26]
+		//$src = relativePath(DOKU_INC.'data/media/',$src);
 		
 		// Will pass token to servefile.php to authorize.  First generate secret uuid if not found.
 		$uuidfile = 'data/tmp/plugin_netlogo_uuid';
@@ -278,7 +279,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		}
 		
 		if ($pcenter) $renderer->doc .= '<p align="center">';
-		$renderer->doc .= '<iframe title="" src="http://netlogoweb.org/web?'.$src.' style="width:'.$data['width'].'; height:'.$data['height'].'"></iframe>';
+		$renderer->doc .= '<iframe title="" src="http://netlogoweb.org/web?'.$src.'" style="width:'.$data['width'].'; height:'.$data['height'].'"></iframe>';
 		if ($pcenter) $renderer->doc .= '</p>';
         return true;
     }
