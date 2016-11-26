@@ -5,6 +5,9 @@
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Rik Blok <rik.blok@ubc.ca>
  *
+ * Download:
+ * <https://github.com/rikblok/dokuwiki-plugin-netlogo/zipball/master>
+ * 
  * ToDo:
  *	* automatically add "nlogo    !application/octet-stream" to conf/mime.local.conf? [Rik, 2012-10-19]
  *	* language support [Rik, 2012-10-19]
@@ -253,7 +256,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 
 		// check if jar files exist
 		if (!file_exists($libjar)) {
-			$renderer->doc .= '<div class="error">NetLogo: NetLogoLite.jar version not found. '</div>';
+			$renderer->doc .= '<div class="error">NetLogo: NetLogoLite.jar version not found. </div>';
 			return true;
 		}
 
