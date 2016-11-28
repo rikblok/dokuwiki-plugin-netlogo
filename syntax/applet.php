@@ -279,6 +279,11 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			$data['align']=null;
 		}
 		
+		/*
+			old servefile method: '"lib/plugins/netlogo/inc/servefile.php?src='.urlencode($src).'&expires='.$expires.'&token='.urlencode($token).'"'
+			may still be needed because fetch.php throws Cross-Origin Resource Sharing error
+			[Rik, 2016-11-27]
+		*/
 		if ($pcenter) $renderer->doc .= '<p align="center">';
 		$renderer->doc .= '<iframe title="" src="http://netlogoweb.org/web?'.$src.'" style="width:'.$data['width'].'px; height:'.$data['height'].'px"></iframe>';
 		if ($pcenter) $renderer->doc .= '</p>';
