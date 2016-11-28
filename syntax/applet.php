@@ -13,6 +13,8 @@
  *	* language support [Rik, 2012-10-19]
  *	* better error messages [Rik, 2012-10-19]
  *	* config options (eg. download url) [Rik, 2012-10-19]
+ *	* make it work with local media files.  Currently reports error: "Unable to load NetLogo model from ..., please ensure: * That you can download the resource at this link * That the server containing the resource has Cross-Origin Resource Sharing configured appropriately".  Tried corsharing plugin but didn't help. [Rik, 2016-11-27]
+
  *
  * Documentation:
  * NetLogo model file format <https://github.com/NetLogo/NetLogo/wiki/Model-file-format>
@@ -285,7 +287,7 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 			[Rik, 2016-11-27]
 		*/
 		if ($pcenter) $renderer->doc .= '<p align="center">';
-		$renderer->doc .= '<iframe title="" src="http://netlogoweb.org/web?'.$src.'" style="width:'.$data['width'].'px; height:'.$data['height'].'px"></iframe>';
+		$renderer->doc .= '<iframe title="" src="http://netlogoweb.org/web?'.urlencode($src).'" style="width:'.$data['width'].'px; height:'.$data['height'].'px"></iframe>';
 		if ($pcenter) $renderer->doc .= '</p>';
         return true;
     }
