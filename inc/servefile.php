@@ -12,8 +12,8 @@
 
 // get url parameters
 $src = $_GET['src'];
-$expires = $_GET['expires'];
-$token = $_GET['token'];
+// debugging [Rik, 2016-11-27]: $expires = $_GET['expires'];
+// debugging [Rik, 2016-11-27]: $token = $_GET['token'];
 
 // relative path to DokuWiki root
 if (!defined('DOKU_INC')) define('DOKU_INC', "../../../../"); // assumes servefile.php nested four levels beneath root, in DOKU_INC.'lib/plugins/netlogo/inc/'
@@ -22,7 +22,7 @@ if (!defined('DOKU_INC')) define('DOKU_INC', "../../../../"); // assumes servefi
 $uuidfile = DOKU_INC.'data/tmp/plugin_netlogo_uuid';
 $uuid = file_get_contents($uuidfile);
 //$expectedtoken=crypt($src.$expires,$uuid); // error: can change expires=... in url  (eg. increment by 1) with no problem.  Why? Maybe crypt() has max length for $str? Or am I misusing crypt()? [Rik, 2012-10-06]
-$expectedtoken=hash('sha256',$uuid.$src.$expires); // debugging [Rik, 2012-10-06] - replace crypt() for more than first 8 chars
+// debugging [Rik, 2016-11-27]: $expectedtoken=hash('sha256',$uuid.$src.$expires); // debugging [Rik, 2012-10-06] - replace crypt() for more than first 8 chars
 // debugging [Rik, 2016-11-27]: if ($token != $expectedtoken) die();
 
 // check expiration
