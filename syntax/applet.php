@@ -180,7 +180,6 @@ class syntax_plugin_netlogo_applet extends DokuWiki_Syntax_Plugin {
 		
 		// check .nlogo file read permission
 		$src = $data['src'];
-		$renderer->doc .= '<div class="error">' . resolve_mediaid(getNS($ID),$src,$exists) . '</div>';
 		/* testing: disable filetype checking.  Does this allow remote download of file, eg. from github? [Rik, 2016-11-25]
 		resolve_mediaid(getNS($ID),$src,$exists);
 		if(auth_quickaclcheck(getNS($src).':X') < AUTH_READ){ // auth_quickaclcheck() mimicked from http://xref.dokuwiki.org/reference/dokuwiki/_functions/checkfilestatus.html
