@@ -1,7 +1,7 @@
 base   netlogo
 author Rik Blok
 email  rik.blok@ubc.ca
-date   2017-01-21
+date   2018-07-27
 name   netlogo plugin
 desc   Embed a NetLogo app in your DokuWiki page.
 url    https://www.dokuwiki.org/plugin:netlogo
